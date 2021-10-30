@@ -129,22 +129,32 @@ class Button{
     stroke(0);
     strokeWeight(3);
     rectMode(CENTER);
+    // draw button when it is pressed
     if(this.isPressed){
-      this.illuminance = 230;
+      this.illuminance = 250;
       fill(concat(this.rgbValue, this.illuminance));
       rect(0, 0, this.buttonWidth, this.buttonHeight);
-    }else{
+      fill(0, 0, 0, 50);
+      noStroke();
+      rect(0, -this.buttonHeight*0.45, this.buttonWidth, this.buttonHeight*0.1);
+    }
+    // draw button when it is not pressed
+    else{
       fill(255, 255, 255);
       rect(0, 0, this.buttonWidth, this.buttonHeight);
       rect(0, -this.buttonHeight/2, this.buttonWidth, this.buttonHeight);
+      // if mouse is on -> make it glow
       if(this.isMouseOn){
         if(this.goBright){
-          this.illuminance += 5;
+          this.illuminance += 6;
+          if(this.illuminance > 220){
+            this.goBright = false;
+          }
         }else{
-          this.illuminance -= 5;
-        }
-        if(this.illuminance == 230 || this.illuminance == 80){
-          this.goBright = !this.goBright;
+          this.illuminance -= 6;
+          if(this.illuminance < 80){
+            this.goBright = true;
+          }
         }
       }else{
         this.illuminance = 80;
