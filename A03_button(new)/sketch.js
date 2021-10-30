@@ -12,15 +12,30 @@ function setup() {
   // global var init
   title = true;
   redEmoji = ['🤬', '👹', '💋', '👠', '🦞', '🌹', '🍓', '🍎', '🥊', '🚗'];
-  red1 = new Emoji(width/2, height/2, 2, -2, redEmoji[1]);
-  red2 = new Emoji(width/2, height/2, -1, -2, redEmoji[2]);
+  test = new EmojiShooter(width/2, height/2, 0);
 }
 
 // EmojiShooter
 class EmojiShooter{
-  constructor(){
-
+  constructor(posx, posy, color){
+    this.posx = posx;
+    this.posy = posy;
+    this.color = color;
+    this.size = 10;
+    this.emojis = [];
+    for(let i = 0; i < 10; i ++){
+      this.emojis.push(new Emoji(posx, posy, random(-2, 2), random(-3.5, 0.5), redEmoji[i]));
+    }
   }
+
+  // display
+  display(){
+    for(let i = 0; i < 10; i++){
+      this.emojis[i].display();
+    }
+  };
+
+
 }
 
 // Emoji
@@ -59,8 +74,13 @@ class Emoji{
   }
 }
 
+// Event handler
+function mouseClicked(){
+
+}
+
+
 function draw() {
   background(255);
-  red1.display();
-  red2.display();
+  test.display();
 }
