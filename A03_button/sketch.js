@@ -161,7 +161,7 @@ function drawTitle(){
   fill(white);
   textSize(200);
   textAlign(CENTER, CENTER);
-  text('로봇', width/2, height/2 - 120);
+  text('로봇😂', width/2, height/2 - 120);
   textFont(cookieRegular);
   textSize(30);
   text('아무 곳이나 클릭해서 시작하세요', width/2, height/2 + 80);
