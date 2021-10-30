@@ -1,6 +1,7 @@
 // global variables
 let title;
 let colorCode;
+let currentHue;
 
 // objects
 let buttons = [];
@@ -26,6 +27,7 @@ function setup() {
   // global var init
   title = true;
   colorCode = 111;
+  currentHue = 0;
   // emoji set init
   redEmoji = ['🤬', '👹', '💋', '👠', '🦞', '🌹', '🍓', '🍎', '🥊', '🚗'];
   blueEmoji = ['🥶', '👖', '🧢', '🅿️', '🐳', '💧', '🔵', '🎽', '💎', '📘'];
@@ -38,10 +40,15 @@ function setup() {
   // declare colors
   blacks = color(0, 0, 0);
   white = color(255, 255, 255);
+  // colorMode HSB when title
+  colorMode(HSB);
   // button objects
   buttons.push(new Button(width*0.3, height*0.8, 211));
   buttons.push(new Button(width*0.5, height*0.8, 121));
   buttons.push(new Button(width*0.7, height*0.8, 112));
+  // shooters init for title
+  let colorCodes = [111, 211, 121, 112, 221, 212, 122, 222];
+  shooters.push(new EmojiShooter(random(0, width), random(0, height), colorCodes[int(random(0, 8))]));
   // hide cursor
   noCursor();
 }
@@ -179,6 +186,13 @@ class EmojiShooter{
     }
   }
 
+  // reset
+  reset(){
+    for(let i = 0; i < 10; i++){
+      this.emojis[i].reset();
+    }
+  }
+
   // display
   display(){
     for(let i = 0; i < 10; i++){
@@ -213,6 +227,7 @@ class Emoji{
     rotate(this.ang);
     textAlign(CENTER, CENTER);
     textSize(55);
+    noStroke();
     text(this.emoji, 0, 0);
     pop();
     // dynamic update
@@ -225,58 +240,109 @@ class Emoji{
 
 // Event handler
 function mousePressed(){
-  // when mouse is in emoji area
-  if(mouseY < height * 0.7){
-    shooters.push([new EmojiShooter(mouseX, mouseY, colorCode), frameCount]);
+  // title stage
+  if(title){
+    title = false;
+    colorMode(RGB);
+    shooters = [];
   }
-  // when mouse is in button area
+  // not title stage
   else{
-    for(let i = 0; i < buttons.length; i++){
-      areaRegion = buttons[i].getButtonArea();
-      if(
-        areaRegion[0] < mouseX &&
-        mouseX < areaRegion[1] &&
-        areaRegion[2] < mouseY &&
-        mouseY < areaRegion[3]
-      ){
-        buttons[i].toggle(); // toggle
-        // update color code
-        print(buttons[0].getIsPressed());
-        print(buttons[1].getIsPressed());
-        print(buttons[2].getIsPressed());
-        colorCode = 100*buttons[0].getIsPressed() + 10*buttons[1].getIsPressed() + buttons[2].getIsPressed();
+    // when mouse is in emoji area
+    if(mouseY < height * 0.7){
+      shooters.push([new EmojiShooter(mouseX, mouseY, colorCode), frameCount]);
+    }
+    // when mouse is in button area
+    else{
+      for(let i = 0; i < buttons.length; i++){
+        areaRegion = buttons[i].getButtonArea();
+        if(
+          areaRegion[0] < mouseX &&
+          mouseX < areaRegion[1] &&
+          areaRegion[2] < mouseY &&
+          mouseY < areaRegion[3]
+        ){
+          buttons[i].toggle(); // toggle
+          // update color code
+          colorCode = 100*buttons[0].getIsPressed() + 10*buttons[1].getIsPressed() + buttons[2].getIsPressed();
+        }
       }
     }
   }
 }
 
+function keyPressed(){
+  if(!title){
+    title = true;
+    colorMode(HSB);
+    shooters = [];
+    let colorCodes = [111, 211, 121, 112, 221, 212, 122, 222];
+    shooters.push(new EmojiShooter(random(0, width), random(0, height), colorCodes[int(random(0, 8))]));
+  }
+}
+
 // main
 function draw() {
-  background(255);
-  // draw falling emojis
-  for(let i = 0; i < shooters.length; i++){
-    shooters[i][0].display();
-    // performance : delete shooter
-    if(frameCount > shooters[i][1] + 120){
-      shooters.shift();
+  // title stage
+  print(title);
+  if(title){
+    // background : changing rainbow
+    background(currentHue, 20, 255);
+    if(currentHue <= 360){
+      currentHue += 1;
+    }else{
+      currentHue = 0;
     }
+    // reset emoji shooter
+    if(frameCount % 120 == 0){
+      shooters = [];
+      let colorCodes = [111, 211, 121, 112, 221, 212, 122, 222];
+      shooters.push(new EmojiShooter(random(0, width), random(0, height/2), colorCodes[int(random(0, 8))]));
+    }
+    // draw falling emojis
+    shooters[0].display();
+    // text
+    let textTitle = 'COLOR OF EMOJI';
+    let textDescription = `
+    1. Press the buttons to set emoji's color.
+    2. Click anywhere to shoot your emojis.
+    3. Enjoy!
+    `;
+    textAlign(CENTER, CENTER);
+    textSize(100);
+    text(textTitle, width/2, height*0.2);
+    textAlign(CENTER, CENTER);
+    textSize(30);
+    text(textDescription, width/2, height*0.5);
   }
-  // draw table
-  noStroke();
-  rectMode(CORNER);
-  fill(255);
-  rect(0, height*0.7, width, height);
-  stroke(0);
-  strokeWeight(3);
-  line(0, height*0.7, width, height*0.7);
-  // draw buttons
-  for(let i = 0; i < buttons.length; i++){
-    buttons[i].display();
+  // main stage
+  else{
+    background(255);
+    // draw falling emojis
+    for(let i = 0; i < shooters.length; i++){
+      shooters[i][0].display();
+      // performance : delete shooter
+      if(frameCount > shooters[i][1] + 120){
+        shooters.shift();
+      }
+    }
+    // draw table
+    noStroke();
+    rectMode(CORNER);
+    fill(255);
+    rect(0, height*0.7, width, height);
+    stroke(0);
+    strokeWeight(3);
+    line(0, height*0.7, width, height*0.7);
+    // draw buttons
+    for(let i = 0; i < buttons.length; i++){
+      buttons[i].display();
+    }
+    // show mouse
+    let rgbValue = decodeColor(colorCode)[1];
+    stroke(0);
+    strokeWeight(1);
+    fill(color(rgbValue));
+    ellipse(mouseX, mouseY, 10, 10);
   }
-  // show mouse
-  let rgbValue = decodeColor(colorCode)[1];
-  stroke(0);
-  strokeWeight(1);
-  fill(color(rgbValue));
-  ellipse(mouseX, mouseY, 10, 10);
 }
