@@ -1,5 +1,6 @@
 // global variables
 let title;
+let shooters = [];
 
 // emoji arrs
 let redEmoji;
@@ -12,7 +13,6 @@ function setup() {
   // global var init
   title = true;
   redEmoji = ['🤬', '👹', '💋', '👠', '🦞', '🌹', '🍓', '🍎', '🥊', '🚗'];
-  test = new EmojiShooter(width/2, height/2, 0);
 }
 
 // EmojiShooter
@@ -75,12 +75,21 @@ class Emoji{
 }
 
 // Event handler
-function mouseClicked(){
-
+function mousePressed(){
+  shooters.push([new EmojiShooter(mouseX, mouseY, 0), frameCount]);
 }
 
-
+// main
 function draw() {
   background(255);
-  test.display();
+  fill(0);
+  // show mouse
+  ellipse(mouseX, mouseY, 10, 10);
+  for(let i = 0; i < shooters.length; i++){
+    shooters[i][0].display();
+    // performance : delete shooter
+    if(frameCount > shooters[i][1] + 100){
+      shooters.shift();
+    }
+  }
 }
