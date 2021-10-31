@@ -1,7 +1,6 @@
 // global variables
 let title;
 let colorCode;
-let currentHue;
 
 // objects
 let buttons = [];
@@ -20,6 +19,7 @@ let blackEmoji;
 // declare colors
 let black;
 let white;
+let currentHue;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -114,6 +114,11 @@ class Button{
   // toggle button
   toggle(){
     this.isPressed = !this.isPressed;
+  }
+
+  // reset
+  reset(){
+    this.isPressed = false;
   }
 
   // display
@@ -275,6 +280,10 @@ function keyPressed(){
   if(!title){
     title = true;
     colorMode(HSB);
+    colorCode = 111;
+    for(let i = 0; i < 3; i ++){
+      buttons[i].reset();
+    }
     shooters = [];
     let colorCodes = [111, 211, 121, 112, 221, 212, 122, 222];
     shooters.push(new EmojiShooter(random(0, width), random(0, height), colorCodes[int(random(0, 8))]));
