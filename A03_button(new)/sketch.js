@@ -308,6 +308,8 @@ function draw() {
     2. Click anywhere to shoot your emojis.
     3. Enjoy!
     `;
+    fill(0);
+    noStroke();
     textAlign(CENTER, CENTER);
     textSize(100);
     text(textTitle, width/2, height*0.2);
