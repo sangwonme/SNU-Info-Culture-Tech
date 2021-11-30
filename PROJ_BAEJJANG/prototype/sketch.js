@@ -1,6 +1,6 @@
 // immages
-let player_imgs = [];
-let backgorund_img;
+let plyaerImgs = [];
+let backgroundImg;
 let gamefont;
 let gameController;
 let player;
@@ -8,22 +8,32 @@ let test;
 
 // song
 let bgm;
+let notes = [];
+let chords = [];
 
 function preload(){
+  // load images
   for(let i = 1; i <= 5; i++){
-    player_imgs.push(loadImage('./assets/' + i + '.png'));
-    print(player_imgs[i]);
+    plyaerImgs.push(loadImage('./assets/' + i + '.png'));
   }
-  backgorund_img = loadImage('./assets/background.png');
-  print(backgorund_img);
+  backgroundImg = loadImage('./assets/background.png');
+  // load font
   gamefont = loadFont('./assets/KOTRAHOPE_TTF.ttf');
-  bgm = loadSound('./assets/bgm.mp3');
+  // load audio
+  bgm = loadSound('./assets/audio/bgm.mp3');
+  for(let i = 1; i <=6; i++){
+    notes.push(loadSound('./assets/audio/N' + i + '.mp3'));
+  }
+  for(let i = 1; i <= 3; i++){
+    chords.push(loadSound('./assets/audio/C' + i + '.mp3'));
+  }
 }
 
 function setup() {
   createCanvas(843, 596);
+  bgm.setVolume(0.5);
   bgm.play();
-  gameController = new GameController(gamefont, player_imgs);
+  gameController = new GameController(gamefont, plyaerImgs, notes, chords);
 }
 
 function keyPressed(){
@@ -40,6 +50,6 @@ function mouseReleased(){
 }
 
 function draw() {
-  image(backgorund_img, 0, 0);
+  image(backgroundImg, 0, 0);
   gameController.display();
 }

@@ -1,5 +1,5 @@
 class GameController{
-    constructor(gamefont, playerImgs){
+    constructor(gamefont, playerImgs, notes, chords){
         // init actionQueue
         this.actionQueue = [];
         this.initQueue();
@@ -12,6 +12,12 @@ class GameController{
         this.mouseUpY = 0;
         // player
         this.player = new Player(playerImgs);
+        // sounds
+        this.notes = notes;
+        this.chords = chords;
+        this.noteSequence;
+        this.noteIdx = 0;
+        this.initNoteSequence();
     }
 
     generateAction(){
@@ -50,10 +56,38 @@ class GameController{
             this.mouseUpY = y;
         }
     }
+    
+    stopAllSounds(){
+        for(let i = 0; i < this.notes.length; i++){
+            this.notes[i].stop();
+        }
+        for(let i = 0; i < this.chords.length; i++){
+            this.chords[i].stop();
+        }
+    }
+
+    initNoteSequence(){
+        this.noteSequence = [];
+        let ns1 = [5, 3, 4, 2, 3, 4, 1, 2, 3, 0];
+        let ns2 = [2, 2, 3, 1, 4, 2, 3];
+        let ns3 = [0, 2, 0, 0, 1];
+        let patterns = 2;
+        let r = random(0, 1);
+        if(r < 1/patterns){
+            this.noteSequence = ns1;
+        }
+        else if(1/patterns < r < 2/patterns){
+            this.noteSequence = ns2;
+        }else{
+            this.noteSequence = ns3;
+        }
+        print(r);
+        print(this.noteSequence);
+    }
 
     judgeInput(inputType, inputKey){
-        print(this.mouseDownX, this.mouseDownY, this.mouseUpX, this.mouseUpY);
         let inputAction;
+        this.stopAllSounds();
         if(inputType == 'MOUSE'){
             if(this.mouseUpY - this.mouseDownY < -50){
                 inputAction = '↑';
@@ -66,9 +100,16 @@ class GameController{
             inputAction = inputKey - 48;
         }
         if(this.actionQueue[0] == inputAction){
+            this.notes[this.noteSequence[this.noteIdx]].play();
+            this.noteIdx ++;
+            if(this.noteIdx == this.noteSequence.length){
+                this.noteIdx = 0;
+                this.initNoteSequence();
+            }
             this.player.playerCorrect();
             this.shiftQueue();
         }else{
+            this.initNoteSequence();
             this.player.playerWrong();
         }
     }
