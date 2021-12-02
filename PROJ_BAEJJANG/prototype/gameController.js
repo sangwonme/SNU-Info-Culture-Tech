@@ -19,21 +19,25 @@ class GameController{
         this.initVolume();
     }
 
+    // generate random action
     generateAction(){
         return int(random(1,7));
     }
 
+    // init action queue
     initQueue(){
         for(let i = 0; i < 11; i++){
             this.actionQueue.push(this.generateAction());
         }
     }
 
+    // shift action queue
     shiftQueue(){
         this.actionQueue.push(this.generateAction());
         this.actionQueue.shift();
     }
 
+    // update class var : mouseXY
     updateMousePos(x, y, mode){
         if(mode == 'PRESS'){
             this.mouseDownX = x;
@@ -45,6 +49,7 @@ class GameController{
         }
     }
 
+    // Audio Mixing
     initVolume(){
         for(let i = 0; i < this.notes.length; i++){
             this.notes[i].setVolume(0.5);
@@ -52,6 +57,7 @@ class GameController{
         this.noise.setVolume(3);
     }
     
+    // Stop all prev sounds
     stopAllSounds(){
         for(let i = 0; i < this.notes.length; i++){
             this.notes[i].stop();
@@ -62,6 +68,7 @@ class GameController{
         this.noise.stop();
     }
 
+    // Judge user input if it's correct or not
     judgeInput(inputType, inputKey){
         let inputAction;
         this.stopAllSounds();
@@ -89,10 +96,11 @@ class GameController{
         }
     }
 
+    // display assets
     display(){
         // show actions queue
         for(let i = 0; i < this.actionQueue.length; i++){
-            if(i == this.actionQueue.length - 1){
+            if(i == 0){
                 fill(255, 0,0);
             }
             else{
@@ -102,16 +110,16 @@ class GameController{
             textAlign(CENTER, CENTER);
             textSize(30);
             textFont(this.gamefont);
-            let action = this.actionQueue[this.actionQueue.length - i - 1];
+            let action = this.actionQueue[i];
             if(action == 5){
                 action = '↑';
             }
             else if(action ==6){
                 action = '↓';
             }
-            text(action, 80+width*(i/12), height*0.11);
+            text(action, 80+width*(i/12), height*0.1);
         }
-        // player
+        // show player
         this.player.display();
     }
 }
