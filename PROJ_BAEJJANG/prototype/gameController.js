@@ -1,5 +1,5 @@
 class GameController{
-    constructor(gamefont, playerImgs, soundEffects){
+    constructor(gamefont, graphicAssets, soundEffects){
         // init actionQueue
         this.actionQueue = [];
         this.initQueue();
@@ -11,8 +11,13 @@ class GameController{
         this.mouseUpX = 0;
         this.mouseUpY = 0;
         // player
-        this.player = new Player(playerImgs);
-        // sounds
+        this.player = new Player(graphicAssets['player']);
+        // graphic assets
+        this.garbageImgs = graphicAssets['garbage'];
+        this.moneyImgs = graphicAssets['money'];
+        // objects
+        this.garbages = [];
+        // sound assets
         this.notes = soundEffects['notes'];
         this.chords = soundEffects['chords'];
         this.noise = soundEffects['noise'];
@@ -93,6 +98,11 @@ class GameController{
         }else{
             this.noise.play();
             this.player.playerWrong();
+            this.garbages = [];
+            for(let i = 0; i < 3; i++){
+                this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
+            }
+            print(this.garbages.length);
         }
     }
 
@@ -121,5 +131,9 @@ class GameController{
         }
         // show player
         this.player.display();
+        // throw garbages
+        for(let i = 0; i < this.garbages.length; i++){
+            this.garbages[i].display();
+        }
     }
 }

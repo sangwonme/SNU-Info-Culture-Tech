@@ -1,10 +1,12 @@
-// immages
-let plyaerImgs = [];
-let backgroundImg;
-let gamefont;
+// game controller
 let gameController;
-let player;
-let test;
+
+// immages
+let graphicAssets = {};
+let backgroundImg;
+
+// font
+let gamefont;
 
 // song
 let bgm;
@@ -12,10 +14,22 @@ let soundEffects = {};
 
 function preload(){
   // load images
-  for(let i = 1; i <= 5; i++){
-    plyaerImgs.push(loadImage('./assets/' + i + '.png'));
-  }
   backgroundImg = loadImage('./assets/background.png');
+  let playerImgs = [];
+  for(let i = 1; i <= 5; i++){
+    playerImgs.push(loadImage('./assets/' + i + '.png'));
+  }
+  let garbageImgs = [];
+  for(let i = 0; i <= 3; i++){
+    garbageImgs.push(loadImage('./assets/graphic/garbage' + i + '.png'));
+  }
+  let moneyImgs = [];
+  for(let i = 1; i <= 2; i++){
+    moneyImgs.push(loadImage('./assets/graphic/money' + i + '.png'));
+  }
+  graphicAssets['player'] = playerImgs;
+  graphicAssets['garbage'] = garbageImgs;
+  graphicAssets['money'] = moneyImgs;
   // load font
   gamefont = loadFont('./assets/KOTRAHOPE_TTF.ttf');
   // load audio
@@ -37,7 +51,7 @@ function setup() {
   createCanvas(843, 596);
   bgm.setVolume(0.5);
   bgm.play();
-  gameController = new GameController(gamefont, plyaerImgs, soundEffects);
+  gameController = new GameController(gamefont, graphicAssets, soundEffects);
 }
 
 function keyPressed(){
