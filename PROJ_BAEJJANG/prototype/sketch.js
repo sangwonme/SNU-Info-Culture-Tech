@@ -8,8 +8,7 @@ let test;
 
 // song
 let bgm;
-let notes = [];
-let chords = [];
+let soundEffects = {};
 
 function preload(){
   // load images
@@ -21,19 +20,24 @@ function preload(){
   gamefont = loadFont('./assets/KOTRAHOPE_TTF.ttf');
   // load audio
   bgm = loadSound('./assets/audio/bgm.mp3');
+  let notes = [];
+  let chords = [];
   for(let i = 1; i <=6; i++){
     notes.push(loadSound('./assets/audio/N' + i + '.mp3'));
   }
   for(let i = 1; i <= 3; i++){
     chords.push(loadSound('./assets/audio/C' + i + '.mp3'));
   }
+  soundEffects['notes'] = notes;
+  soundEffects['chords'] = chords;
+  soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
 }
 
 function setup() {
   createCanvas(843, 596);
   bgm.setVolume(0.5);
   bgm.play();
-  gameController = new GameController(gamefont, plyaerImgs, notes, chords);
+  gameController = new GameController(gamefont, plyaerImgs, soundEffects);
 }
 
 function keyPressed(){

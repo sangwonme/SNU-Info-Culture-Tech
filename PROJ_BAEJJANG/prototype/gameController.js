@@ -1,5 +1,5 @@
 class GameController{
-    constructor(gamefont, playerImgs, notes, chords){
+    constructor(gamefont, playerImgs, soundEffects){
         // init actionQueue
         this.actionQueue = [];
         this.initQueue();
@@ -13,26 +13,14 @@ class GameController{
         // player
         this.player = new Player(playerImgs);
         // sounds
-        this.notes = notes;
-        this.chords = chords;
-        this.noteSequence;
-        this.noteIdx = 0;
-        this.initNoteSequence();
+        this.notes = soundEffects['notes'];
+        this.chords = soundEffects['chords'];
+        this.noise = soundEffects['noise'];
+        this.initVolume();
     }
 
     generateAction(){
-        let actionNum = int(random(1,7));
-        let nextAction;
-        if(actionNum <= 4){
-            nextAction = String(actionNum);
-        }
-        else if(actionNum == 5){
-            nextAction = '↑';
-        }
-        else if(actionNum == 6){
-            nextAction = '↓';
-        }
-        return nextAction;
+        return int(random(1,7));
     }
 
     initQueue(){
@@ -56,6 +44,13 @@ class GameController{
             this.mouseUpY = y;
         }
     }
+
+    initVolume(){
+        for(let i = 0; i < this.notes.length; i++){
+            this.notes[i].setVolume(0.5);
+        }
+        this.noise.setVolume(3);
+    }
     
     stopAllSounds(){
         for(let i = 0; i < this.notes.length; i++){
@@ -64,25 +59,7 @@ class GameController{
         for(let i = 0; i < this.chords.length; i++){
             this.chords[i].stop();
         }
-    }
-
-    initNoteSequence(){
-        this.noteSequence = [];
-        let ns1 = [5, 3, 4, 2, 3, 4, 1, 2, 3, 0];
-        let ns2 = [2, 2, 3, 1, 4, 2, 3];
-        let ns3 = [0, 2, 0, 0, 1];
-        let patterns = 2;
-        let r = random(0, 1);
-        if(r < 1/patterns){
-            this.noteSequence = ns1;
-        }
-        else if(1/patterns < r < 2/patterns){
-            this.noteSequence = ns2;
-        }else{
-            this.noteSequence = ns3;
-        }
-        print(r);
-        print(this.noteSequence);
+        this.noise.stop();
     }
 
     judgeInput(inputType, inputKey){
@@ -90,26 +67,24 @@ class GameController{
         this.stopAllSounds();
         if(inputType == 'MOUSE'){
             if(this.mouseUpY - this.mouseDownY < -50){
-                inputAction = '↑';
+                inputAction = 5;
             }
             else if(this.mouseDownY - this.mouseUpY < -50){
-                inputAction = '↓';
+                inputAction = 6;
             }
         }
         else if(inputType == 'KEY'){
             inputAction = inputKey - 48;
+            if(inputAction == 5 || inputAction == 6){
+                inputAction = 0;
+            }
         }
         if(this.actionQueue[0] == inputAction){
-            this.notes[this.noteSequence[this.noteIdx]].play();
-            this.noteIdx ++;
-            if(this.noteIdx == this.noteSequence.length){
-                this.noteIdx = 0;
-                this.initNoteSequence();
-            }
+            this.notes[inputAction-1].play();
             this.player.playerCorrect();
             this.shiftQueue();
         }else{
-            this.initNoteSequence();
+            this.noise.play();
             this.player.playerWrong();
         }
     }
@@ -127,7 +102,14 @@ class GameController{
             textAlign(CENTER, CENTER);
             textSize(30);
             textFont(this.gamefont);
-            text(this.actionQueue[this.actionQueue.length - i - 1], 80+width*(i/12), height*0.11);
+            let action = this.actionQueue[this.actionQueue.length - i - 1];
+            if(action == 5){
+                action = '↑';
+            }
+            else if(action ==6){
+                action = '↓';
+            }
+            text(action, 80+width*(i/12), height*0.11);
         }
         // player
         this.player.display();
