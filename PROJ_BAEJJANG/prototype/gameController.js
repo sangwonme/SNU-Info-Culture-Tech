@@ -22,6 +22,8 @@ class GameController{
         this.chords = soundEffects['chords'];
         this.noise = soundEffects['noise'];
         this.initVolume();
+        // timer
+        this.timer = 100;
     }
 
     // generate random action
@@ -93,6 +95,7 @@ class GameController{
         }
         if(this.actionQueue[0] == inputAction){
             this.notes[inputAction-1].play();
+            this.timer = 100;
             this.player.playerCorrect();
             this.shiftQueue();
         }else{
@@ -102,7 +105,20 @@ class GameController{
             for(let i = 0; i < 3; i++){
                 this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
             }
-            print(this.garbages.length);
+        }
+    }
+
+    // play timer
+    playTimer(){
+        this.timer -= 0.5;
+        if(this.timer < 0){
+            this.noise.play();
+            this.player.playerWrong();
+            this.garbage = [];
+            for(let i = 0; i < 3; i++){
+                this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
+            }
+            this.timer = 100;
         }
     }
 
@@ -135,5 +151,10 @@ class GameController{
         for(let i = 0; i < this.garbages.length; i++){
             this.garbages[i].display();
         }
+        // show timer
+        noStroke();
+        fill(182,64,62);
+        rect(45, 15, this.timer*0.6, 10);
+        this.playTimer();
     }
 }
