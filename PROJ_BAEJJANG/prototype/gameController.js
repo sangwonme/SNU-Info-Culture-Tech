@@ -15,8 +15,11 @@ class GameController{
         // graphic assets
         this.garbageImgs = graphicAssets['garbage'];
         this.moneyImgs = graphicAssets['money'];
+        this.stageImg = graphicAssets['stage'];
+        this.queueImg = graphicAssets['queuebar'];
         // objects
         this.garbages = [];
+        this.speaker = new Speaker(graphicAssets['speaker']);
         // sound assets
         this.notes = soundEffects['notes'];
         this.chords = soundEffects['chords'];
@@ -24,6 +27,9 @@ class GameController{
         this.initVolume();
         // timer
         this.timer = 100;
+        // light opacity
+        this.lightOpacity = 0;
+        this.lightColor = [0, 0, 0];
     }
 
     // generate random action
@@ -61,7 +67,7 @@ class GameController{
         for(let i = 0; i < this.notes.length; i++){
             this.notes[i].setVolume(0.5);
         }
-        this.noise.setVolume(3);
+        this.noise.setVolume(7);
     }
     
     // Stop all prev sounds
@@ -93,11 +99,16 @@ class GameController{
                 inputAction = 0;
             }
         }
+        // correct
         if(this.actionQueue[0] == inputAction){
+            this.lightColor = [random(80,256), random(80,256), random(80,256)];
+            this.lightOpacity = 100;
             this.notes[inputAction-1].play();
             this.player.playerCorrect();
             this.shiftQueue();
-        }else{
+        }
+        // wrong
+        else{
             this.noise.play();
             this.player.playerWrong();
             this.garbages = [];
@@ -110,7 +121,7 @@ class GameController{
 
     // play timer
     playTimer(){
-        this.timer -= 1.5;
+        this.timer -= 1;
         if(this.timer < 0){
             this.noise.play();
             this.player.playerWrong();
@@ -124,6 +135,19 @@ class GameController{
 
     // display assets
     display(){
+        // stage img
+        image(this.stageImg, 0, 0, 843, 596);
+        this.speaker.display();
+        
+        // light
+        noStroke();
+        fill(this.lightColor[0], this.lightColor[1], this.lightColor[2], this.lightOpacity);
+        rect(0, 0, width, height);
+        this.lightOpacity -= 5;
+
+        // queue img
+        image(this.queueImg, 0, -20, 843, 190);
+
         // show actions queue
         for(let i = 0; i < this.actionQueue.length; i++){
             if(i == 0){
@@ -143,7 +167,7 @@ class GameController{
             else if(action ==6){
                 action = '↓';
             }
-            text(action, 80+width*(i/12), height*0.1);
+            text(action, 60+width*(i/12), height*0.1);
         }
         // show player
         this.player.display();
@@ -154,7 +178,7 @@ class GameController{
         // show timer
         noStroke();
         fill(182,64,62);
-        rect(45, 15, this.timer*7.7, 10);
+        rect(40, 15, this.timer*7.7, 10);
         this.playTimer();
     }
 }

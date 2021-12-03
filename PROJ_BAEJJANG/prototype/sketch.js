@@ -3,7 +3,6 @@ let gameController;
 
 // immages
 let graphicAssets = {};
-let backgroundImg;
 
 // font
 let gamefont;
@@ -14,7 +13,6 @@ let soundEffects = {};
 
 function preload(){
   // load images
-  backgroundImg = loadImage('./assets/background.png');
   let playerImgs = [];
   for(let i = 1; i <= 5; i++){
     playerImgs.push(loadImage('./assets/' + i + '.png'));
@@ -27,9 +25,16 @@ function preload(){
   for(let i = 1; i <= 2; i++){
     moneyImgs.push(loadImage('./assets/graphic/money' + i + '.png'));
   }
+  let speakerImgs = [];
+  for(let i = 1; i <= 3; i++){
+    speakerImgs.push(loadImage('./assets/graphic/speaker' + i + '.png'));
+  }
   graphicAssets['player'] = playerImgs;
   graphicAssets['garbage'] = garbageImgs;
   graphicAssets['money'] = moneyImgs;
+  graphicAssets['speaker'] = speakerImgs;
+  graphicAssets['queuebar'] = loadImage('./assets/graphic/queuebar.png');
+  graphicAssets['stage'] = loadImage('./assets/graphic/stage.png');
   // load font
   gamefont = loadFont('./assets/KOTRAHOPE_TTF.ttf');
   // load audio
@@ -68,6 +73,5 @@ function mouseReleased(){
 }
 
 function draw() {
-  image(backgroundImg, 0, 0);
   gameController.display();
 }
