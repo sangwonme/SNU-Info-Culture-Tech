@@ -8,7 +8,6 @@ let graphicAssets = {};
 let gamefont;
 
 // song
-let bgm;
 let soundEffects = {};
 
 function preload(){
@@ -29,16 +28,25 @@ function preload(){
   for(let i = 1; i <= 3; i++){
     speakerImgs.push(loadImage('./assets/graphic/speaker' + i + '.png'));
   }
+  let smallfireImgs = [];
+  for(let i = 1; i <= 4; i++){
+    smallfireImgs.push(loadImage('./assets/graphic/smallfire' + i + '.png'));
+  }
+  let combofireImgs = [];
+  for(let i = 1; i <= 4; i++){
+    combofireImgs.push(loadImage('./assets/graphic/combofire' + i + '.png'));
+  }  
   graphicAssets['player'] = playerImgs;
   graphicAssets['garbage'] = garbageImgs;
   graphicAssets['money'] = moneyImgs;
   graphicAssets['speaker'] = speakerImgs;
+  graphicAssets['smallfire'] = smallfireImgs;
+  graphicAssets['combofire'] = combofireImgs;
   graphicAssets['queuebar'] = loadImage('./assets/graphic/queuebar.png');
   graphicAssets['stage'] = loadImage('./assets/graphic/stage.png');
   // load font
   gamefont = loadFont('./assets/KOTRAHOPE_TTF.ttf');
   // load audio
-  bgm = loadSound('./assets/audio/bgm.mp3');
   let notes = [];
   let chords = [];
   for(let i = 1; i <=6; i++){
@@ -47,6 +55,7 @@ function preload(){
   for(let i = 1; i <= 3; i++){
     chords.push(loadSound('./assets/audio/C' + i + '.mp3'));
   }
+  soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
   soundEffects['notes'] = notes;
   soundEffects['chords'] = chords;
   soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
@@ -54,8 +63,6 @@ function preload(){
 
 function setup() {
   createCanvas(843, 596);
-  bgm.setVolume(0.5);
-  bgm.play();
   gameController = new GameController(gamefont, graphicAssets, soundEffects);
 }
 

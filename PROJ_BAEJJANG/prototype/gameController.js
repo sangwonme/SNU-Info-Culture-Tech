@@ -20,6 +20,9 @@ class GameController{
         // objects
         this.garbages = [];
         this.speaker = new Speaker(graphicAssets['speaker']);
+        this.fire = new Fire(graphicAssets['smallfire'], graphicAssets['combofire'], 0);
+        // bgm
+        this.bgm = soundEffects['bgm'];
         // sound assets
         this.notes = soundEffects['notes'];
         this.chords = soundEffects['chords'];
@@ -30,6 +33,12 @@ class GameController{
         // light opacity
         this.lightOpacity = 0;
         this.lightColor = [0, 0, 0];
+        // play bgm
+        this.bgm.play();
+        // score
+        this.score = 0;
+        this.combo = 0;
+        this.phase = 0;
     }
 
     // generate random action
@@ -64,6 +73,7 @@ class GameController{
 
     // Audio Mixing
     initVolume(){
+        this.bgm.setVolume(0.5);
         for(let i = 0; i < this.notes.length; i++){
             this.notes[i].setVolume(0.5);
         }
@@ -101,6 +111,8 @@ class GameController{
         }
         // correct
         if(this.actionQueue[0] == inputAction){
+            this.combo += 1;
+            this.setPhase();
             this.lightColor = [random(80,256), random(80,256), random(80,256)];
             this.lightOpacity = 100;
             this.notes[inputAction-1].play();
@@ -109,6 +121,8 @@ class GameController{
         }
         // wrong
         else{
+            this.combo = 0;
+            this.setPhase();
             this.noise.play();
             this.player.playerWrong();
             this.garbages = [];
@@ -117,11 +131,13 @@ class GameController{
             }
         }
         this.timer = 100;
+        print(this.combo);
+        print(this.phase);
     }
 
     // play timer
     playTimer(){
-        this.timer -= 1;
+        this.timer -= 1 + 0.5 * this.phase;
         if(this.timer < 0){
             this.noise.play();
             this.player.playerWrong();
@@ -130,6 +146,22 @@ class GameController{
                 this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
             }
             this.timer = 100;
+        }
+    }
+
+    // change phase
+    setPhase(){
+        if(this.combo < 10){
+            this.phase = 0;
+        }
+        else if(9 < this.combo && this.combo <= 29){
+            this.phase = 1;
+        }
+        else if(29 < this.combo && this.combo <= 60){
+            this.phase = 2;
+        }
+        else{
+            this.phase = 3;
         }
     }
 
@@ -169,6 +201,9 @@ class GameController{
             }
             text(action, 60+width*(i/12), height*0.1);
         }
+        // show fire
+        this.fire.setPhase(this.phase);
+        this.fire.display();
         // show player
         this.player.display();
         // throw garbages
