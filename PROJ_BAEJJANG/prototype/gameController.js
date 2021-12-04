@@ -116,7 +116,7 @@ class GameController{
             this.lightColor = [random(80,256), random(80,256), random(80,256)];
             this.lightOpacity = 100;
             this.notes[inputAction-1].play();
-            this.player.playerCorrect();
+            this.player.playerCorrect(inputAction);
             this.shiftQueue();
         }
         // wrong

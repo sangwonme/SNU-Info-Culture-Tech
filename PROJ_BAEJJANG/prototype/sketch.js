@@ -13,8 +13,9 @@ let soundEffects = {};
 function preload(){
   // load images
   let playerImgs = [];
-  for(let i = 1; i <= 5; i++){
-    playerImgs.push(loadImage('./assets/' + i + '.png'));
+  for(let i = 0; i <= 6; i++){
+    playerImgs.push(loadImage('./assets/graphic/p' + i + '_1.png'));
+    playerImgs.push(loadImage('./assets/graphic/p' + i + '_2.png'));
   }
   let garbageImgs = [];
   for(let i = 0; i <= 3; i++){
