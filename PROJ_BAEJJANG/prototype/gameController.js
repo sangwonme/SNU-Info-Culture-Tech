@@ -121,32 +121,30 @@ class GameController{
         }
         // wrong
         else{
-            this.combo = 0;
-            this.setPhase();
-            this.noise.play();
-            this.player.playerWrong();
-            this.garbages = [];
-            for(let i = 0; i < 3; i++){
-                this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
-            }
+            this.fail();
         }
         this.timer = 100;
-        print(this.combo);
-        print(this.phase);
     }
 
     // play timer
     playTimer(){
         this.timer -= 1 + 0.5 * this.phase;
         if(this.timer < 0){
-            this.noise.play();
-            this.player.playerWrong();
-            this.garbage = [];
-            for(let i = 0; i < 3; i++){
-                this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
-            }
-            this.timer = 100;
+            this.fail();
         }
+    }
+
+    // success or fail
+    fail(){
+        this.combo = 0;
+        this.setPhase();
+        this.noise.play();
+        this.player.playerWrong();
+        this.garbage = [];
+        for(let i = 0; i < 3; i++){
+            this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
+        }
+        this.timer = 100;
     }
 
     // change phase
