@@ -41,7 +41,7 @@ class GameController{
         this.bgm.play();
         // score
         this.score = 0;
-        this.combo = 45;
+        this.combo = 0;
         this.phase = 0;
     }
 
