@@ -25,6 +25,7 @@ class GameController{
         this.fire = new Fire(graphicAssets['smallfire'], graphicAssets['combofire'], 0);
         // bgm
         this.bgm = soundEffects['bgm'];
+        this.bgmVolume = 0.5;
         // sound assets
         this.notes = soundEffects['notes'];
         this.chords = soundEffects['chords'];
@@ -43,6 +44,20 @@ class GameController{
         this.score = 0;
         this.combo = 0;
         this.phase = 0;
+        // end game
+        this.readyEnd = false;
+        this.actionEnd = false;
+        this.finalEnd = false;
+    }
+
+    readyEndGame(){
+        this.readyEnd = true;
+    }
+    endMusic(){
+        this.actionEnd = true;
+    }
+    getFinalEnd(){
+        return this.finalEnd;
     }
 
     // generate random action
@@ -59,7 +74,9 @@ class GameController{
 
     // shift action queue
     shiftQueue(){
-        this.actionQueue.push(this.generateAction());
+        if(!this.readyEnd){
+            this.actionQueue.push(this.generateAction());
+        }
         this.actionQueue.shift();
     }
 
@@ -77,7 +94,7 @@ class GameController{
 
     // Audio Mixing
     initVolume(){
-        this.bgm.setVolume(0.5);
+        this.bgm.setVolume(this.bgmVolume);
         for(let i = 0; i < this.notes.length; i++){
             this.notes[i].setVolume(0.5);
         }
@@ -133,6 +150,9 @@ class GameController{
             this.combo += 1;
             this.setPhase();
             this.shiftQueue();
+            if(this.actionQueue.length == 0){
+                this.endMusic();
+            }
         }
         // wrong
         else{
@@ -149,6 +169,10 @@ class GameController{
             timerSpeed = 0.2;
         }else{
             timerSpeed = 1 + 0.5 * this.phase;
+        }
+        // if end just stop timer
+        if(this.actionEnd){
+            timerSpeed = 0;
         }
         this.timer -= timerSpeed;
         // when time is over
@@ -210,6 +234,19 @@ class GameController{
 
     // display assets
     display(){
+        // when end(action queue is empty), fadeout music
+        if(this.actionEnd && !this.finalEnd){
+            if(frameCount % 20 == 0){
+                this.bgmVolume -= 0.03;
+            }
+            this.bgm.setVolume(this.bgmVolume);
+        }
+        if(this.bgmVolume < 0.01){
+            this.bgmVolume = 0;
+            this.finalEnd = true;
+        }
+
+
         // stage img
         image(this.stageImg, 0, 0, 843, 596);
         this.speaker.display();

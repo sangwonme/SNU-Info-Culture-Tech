@@ -1,5 +1,5 @@
 // mode
-let mode = 'GAME';
+let mode;
 
 // game controller
 let gameController;
@@ -12,6 +12,14 @@ let gamefont;
 
 // song
 let soundEffects = {};
+
+// gameplay time
+let startTime;
+
+// scene transition
+let blackOpacity = 0;
+let inTransition = false;
+let transitionStartTime;
 
 function preload(){
   // load images
@@ -74,6 +82,7 @@ function preload(){
 function setup() {
   createCanvas(843, 596);
   gameController = new GameController(gamefont, graphicAssets, soundEffects);
+  changeMode('GAME');
 }
 
 function keyPressed(){
@@ -95,9 +104,50 @@ function mouseReleased(){
   }
 }
 
+function changeMode(m){
+  mode = m;
+  startTime = [minute(), second()];
+}
+
+function onTransition(){
+  inTransition = true;
+  transitionStartTime = second();
+  print(transitionStartTime);
+}
+function offTransition(){
+  inTransition = false;
+}
+
 function draw() {
+  // draw scene
   switch(mode){
     case 'GAME' : 
       gameController.display();
+      if(second() == (startTime[1] + 10) % 60){
+        gameController.readyEndGame();
+      }
+      if(gameController.getFinalEnd() && !inTransition){
+        onTransition();
+      }
+      break;
+    case 'END_TOON' :
+      fill(255, 0, 0);
+      rect(0, 0, width, height);
+      break;
   }
+  // transition
+  if(inTransition){
+    blackOpacity += 3;
+    if(second() == (transitionStartTime + 3) % 60){
+      offTransition();
+      changeMode('END_TOON');
+    }
+  }else{
+    if(blackOpacity > 0){
+      blackOpacity -= 3;
+    }
+  }
+  print(blackOpacity, inTransition);
+  fill(0, 0, 0, blackOpacity);
+  rect(0, 0, width, height);
 }

@@ -1,0 +1,5 @@
+class Toon{
+  constructor(graphicAssets){
+		
+	}
+}
