@@ -29,6 +29,8 @@ class GameController{
         this.notes = soundEffects['notes'];
         this.chords = soundEffects['chords'];
         this.noise = soundEffects['noise'];
+        this.coins = soundEffects['coins'];
+        print(this.coins);
         this.initVolume();
         // timer
         this.timer = 100;
@@ -80,6 +82,9 @@ class GameController{
             this.notes[i].setVolume(0.5);
         }
         this.noise.setVolume(7);
+        for(let i = 0; i < this.coins.length; i++){
+            this.coins[i].setVolume(8);
+        }
     }
     
     // Stop all prev sounds
@@ -272,6 +277,7 @@ class GameController{
                 this.moneys[i].display();
                 let touched = this.moneys[i].checkTouch(this.player.getBasketPos()[0], this.player.getBasketPos()[1]);
                 if(touched){
+                    this.coins[int(random(0, 3))].play();
                     this.moneys.splice(i, 1);
                     i -= 1;
                 }

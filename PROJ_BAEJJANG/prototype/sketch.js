@@ -53,16 +53,21 @@ function preload(){
   gamefont = loadFont('./assets/BMKIRANGHAERANG-TTF.ttf');
   // load audio
   let notes = [];
-  let chords = [];
   for(let i = 1; i <=6; i++){
     notes.push(loadSound('./assets/audio/N' + i + '.mp3'));
   }
+  let chords = [];
   for(let i = 1; i <= 3; i++){
     chords.push(loadSound('./assets/audio/C' + i + '.mp3'));
   }
-  soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
+  let coins = [];
+  for(let i = 1; i <= 3; i++){
+    coins.push(loadSound('./assets/audio/coin' + i + '.mp3'));
+  }
   soundEffects['notes'] = notes;
   soundEffects['chords'] = chords;
+  soundEffects['coins'] = coins;
+  soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
   soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
 }
 
