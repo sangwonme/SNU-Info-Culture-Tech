@@ -215,6 +215,9 @@ class GameController{
         else if(29 < this.combo % 50 && this.combo % 50 <= 49){
             this.phase = 2;
         }
+        else if(this.readyEnd){
+            this.phase = this.phase;
+        }
         else{
             this.player.setStatus(7);
             this.phase = 3;

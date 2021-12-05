@@ -1,5 +1,6 @@
 // mode
 let mode;
+let nextScene;
 
 // game controller
 let gameController;
@@ -123,11 +124,14 @@ function draw() {
   switch(mode){
     case 'GAME' : 
       gameController.display();
-      if(second() == (startTime[1] + 10) % 60){
+      // end timing
+      if(minute() == (startTime[0] + 1) % 60 && second() == startTime[1]){
         gameController.readyEndGame();
       }
+      // if gameController is ended, transition to nextScene
       if(gameController.getFinalEnd() && !inTransition){
         onTransition();
+        nextScene = 'END_TOON';
       }
       break;
     case 'END_TOON' :
@@ -140,7 +144,7 @@ function draw() {
     blackOpacity += 3;
     if(second() == (transitionStartTime + 3) % 60){
       offTransition();
-      changeMode('END_TOON');
+      changeMode(nextScene);
     }
   }else{
     if(blackOpacity > 0){
