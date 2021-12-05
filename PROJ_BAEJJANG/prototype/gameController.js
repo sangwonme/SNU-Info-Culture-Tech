@@ -31,7 +31,6 @@ class GameController{
         this.chords = soundEffects['chords'];
         this.noise = soundEffects['noise'];
         this.coins = soundEffects['coins'];
-        print(this.coins);
         this.initVolume();
         // timer
         this.timer = 100;
@@ -50,6 +49,12 @@ class GameController{
         this.finalEnd = false;
     }
 
+    // reset class var for replay
+    initClassVar(){
+
+    }
+
+    // end game
     readyEndGame(){
         this.readyEnd = true;
     }
@@ -58,6 +63,9 @@ class GameController{
     }
     getFinalEnd(){
         return this.finalEnd;
+    }
+    getFinalScore(){
+        return this.score;
     }
 
     // generate random action
@@ -149,6 +157,7 @@ class GameController{
             this.player.playerCorrect(inputAction);
             this.combo += 1;
             this.setPhase();
+            this.score += (this.phase + 1) * 100;
             this.shiftQueue();
             if(this.actionQueue.length == 0){
                 this.endMusic();
@@ -201,6 +210,9 @@ class GameController{
         for(let i = 0; i < 3; i++){
             this.garbages.push(new Garbage(this.garbageImgs[int(random(0, 4))]));
         }
+        if(this.score > 0){
+            this.score -= 50;
+        }
         this.timer = 100;
     }
 
@@ -231,12 +243,14 @@ class GameController{
     addMoney(){
         if(frameCount % 50 == 0){
             let tmp = int(random(1, 3));
-            this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 100*tmp));
+            this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 250*tmp));
         }
     }
 
     // display assets
     display(){
+        // imageMode
+        imageMode(CORNER);
         // when end(action queue is empty), fadeout music
         if(this.actionEnd && !this.finalEnd){
             if(frameCount % 20 == 0){
@@ -317,6 +331,7 @@ class GameController{
                 this.moneys[i].display();
                 let touched = this.moneys[i].checkTouch(this.player.getBasketPos()[0], this.player.getBasketPos()[1]);
                 if(touched){
+                    this.score += this.moneys[i].getScore();
                     this.coins[int(random(0, 3))].play();
                     this.moneys.splice(i, 1);
                     i -= 1;
@@ -345,13 +360,15 @@ class GameController{
         rect(40, 15, this.timer*7.7, 10);
         this.playTimer();
 
-        // show combo
-        image(this.comboboxImg, 15, 480, 150, 75);
+        // show combo & score
+        image(this.comboboxImg, 15, 480, 150, 100);
         fill(0);
         noStroke();
         textAlign(CENTER, CENTER);
         textSize(30);
         textFont(this.gamefont);
         text('콤보 : ' + this.combo, 85, 515);
+        textSize(25);
+        text(this.score, 85, 550);
     }
 }

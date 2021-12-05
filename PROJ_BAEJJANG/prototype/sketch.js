@@ -1,9 +1,9 @@
-// mode
-let mode;
-let nextScene;
+// scene
+let currentScene = 'START_TOON';
 
 // game controller
 let gameController;
+let gameScore;
 
 // immages
 let graphicAssets = {};
@@ -14,13 +14,19 @@ let gamefont;
 // song
 let soundEffects = {};
 
+// toons
+let endToonAImgs = [];
+let endToonBImgs = [];
+let endToonCImgs = [];
+let endToonFImgs = [];
+let endToon;
+
 // gameplay time
 let startTime;
 
 // scene transition
 let blackOpacity = 0;
 let inTransition = false;
-let transitionStartTime;
 
 function preload(){
   // load images
@@ -78,42 +84,60 @@ function preload(){
   soundEffects['coins'] = coins;
   soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
   soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
+  // load toons
+  for(let i = 1; i <= 4; i++){
+    endToonBImgs.push(loadImage('./assets/toon/toon_b_' + i + '.jpg'));
+    endToonCImgs.push(loadImage('./assets/toon/toon_c_' + i + '.jpg'));
+  }
 }
 
 function setup() {
   createCanvas(843, 596);
   gameController = new GameController(gamefont, graphicAssets, soundEffects);
-  changeMode('GAME');
+  endToon = new Toon();
+  // only for debug
+  changeScene();
 }
 
 function keyPressed(){
-  if(gameController.getPhase() != 3 && (49 <= keyCode && keyCode <= 52 || keyCode == 55)){
+  if(currentScene == 'GAME' && gameController.getPhase() != 3 && (49 <= keyCode && keyCode <= 52 || keyCode == 55)){
     gameController.judgeInput('KEY', keyCode);
   }
 }
 
 function mousePressed(){
-  if(gameController.getPhase() != 3){
+  if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'PRESS');
+  }
+  else if(currentScene == 'END_TOON'){
+    endToon.increaseIdx();
   }
 }
 
 function mouseReleased(){
-  if(gameController.getPhase() != 3){
+  if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'RELEASE');
     gameController.judgeInput('MOUSE', 0);
   }
 }
 
-function changeMode(m){
-  mode = m;
-  startTime = [minute(), second()];
+function changeScene(){
+  switch(currentScene){
+    case 'START_TOON' :
+      currentScene = 'GAME';
+      startTime = [minute(), second()];
+      break;
+    case 'GAME' :
+      currentScene = 'END_TOON';
+      break;
+    case 'END_TOON' :
+      currentScene = 'GAME';
+      break;
+  }
 }
 
 function onTransition(){
   inTransition = true;
-  transitionStartTime = second();
-  print(transitionStartTime);
 }
 function offTransition(){
   inTransition = false;
@@ -121,37 +145,41 @@ function offTransition(){
 
 function draw() {
   // draw scene
-  switch(mode){
+  switch(currentScene){
     case 'GAME' : 
       gameController.display();
       // end timing
       if(minute() == (startTime[0] + 1) % 60 && second() == startTime[1]){
         gameController.readyEndGame();
       }
-      // if gameController is ended, transition to nextScene
+      // if gameController is ended
       if(gameController.getFinalEnd() && !inTransition){
+        gameScore = gameController.getFinalScore();
+        if(gameScore > 20000){
+          endToon.setToon(endToonBImgs, gameScore);
+        }else{
+          endToon.setToon(endToonCImgs, gameScore);
+        }
         onTransition();
-        nextScene = 'END_TOON';
       }
       break;
     case 'END_TOON' :
-      fill(255, 0, 0);
-      rect(0, 0, width, height);
+      background(255);
+      endToon.display();
       break;
   }
-  // transition
+  // transition : go black and when black change the scene.
   if(inTransition){
     blackOpacity += 3;
-    if(second() == (transitionStartTime + 3) % 60){
+    if(blackOpacity == 300){
       offTransition();
-      changeMode(nextScene);
+      changeScene();
     }
   }else{
     if(blackOpacity > 0){
       blackOpacity -= 3;
     }
   }
-  print(blackOpacity, inTransition);
   fill(0, 0, 0, blackOpacity);
   rect(0, 0, width, height);
 }
