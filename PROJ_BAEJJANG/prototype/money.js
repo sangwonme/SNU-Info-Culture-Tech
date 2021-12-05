@@ -19,6 +19,10 @@ class Money{
 	checkTouch(x, y){
 		return (dist(x, this.posX, y, this.posY) < 10);
 	}
+	
+	checkOutofScreen(){
+		return (this.posY > height);
+	}
 
 	display(){
 		push();

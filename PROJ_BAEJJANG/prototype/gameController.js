@@ -17,6 +17,7 @@ class GameController{
         this.moneyImgs = graphicAssets['money'];
         this.stageImg = graphicAssets['stage'];
         this.queueImg = graphicAssets['queuebar'];
+        this.comboboxImg = graphicAssets['combobox'];
         // objects
         this.garbages = [];
         this.moneys = [];
@@ -184,7 +185,7 @@ class GameController{
         else if(9 < this.combo && this.combo <= 29){
             this.phase = 1;
         }
-        else if(29 < this.combo && this.combo <= 50){
+        else if(29 < this.combo && this.combo <= 49){
             this.phase = 2;
         }
         else{
@@ -253,6 +254,12 @@ class GameController{
             for(let i = 0; i < this.moneys.length; i++){
                 this.moneys[i].display();
             }
+            if(this.moneys.length > 1){
+                if(this.moneys[0].checkOutofScreen()){
+                    this.moneys.shift();
+                }
+            }
+            print(this.moneys.length);
             // light
             noStroke();
             if(frameCount % 30 == 0){
@@ -269,5 +276,14 @@ class GameController{
         fill(182,64,62);
         rect(40, 15, this.timer*7.7, 10);
         this.playTimer();
+
+        // show combo
+        image(this.comboboxImg, 15, 480, 150, 75);
+        fill(0);
+        noStroke();
+        textAlign(CENTER, CENTER);
+        textSize(30);
+        textFont(this.gamefont);
+        text('콤보 : ' + this.combo, 85, 515);
     }
 }

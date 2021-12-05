@@ -1,3 +1,6 @@
+// mode
+let mode = 'GAME';
+
 // game controller
 let gameController;
 
@@ -44,9 +47,10 @@ function preload(){
   graphicAssets['smallfire'] = smallfireImgs;
   graphicAssets['combofire'] = combofireImgs;
   graphicAssets['queuebar'] = loadImage('./assets/graphic/queuebar.png');
+  graphicAssets['combobox'] = loadImage('./assets/graphic/combobox.png');
   graphicAssets['stage'] = loadImage('./assets/graphic/stage.png');
   // load font
-  gamefont = loadFont('./assets/KOTRAHOPE_TTF.ttf');
+  gamefont = loadFont('./assets/BMKIRANGHAERANG-TTF.ttf');
   // load audio
   let notes = [];
   let chords = [];
@@ -81,5 +85,8 @@ function mouseReleased(){
 }
 
 function draw() {
-  gameController.display();
+  switch(mode){
+    case 'GAME' : 
+      gameController.display();
+  }
 }
