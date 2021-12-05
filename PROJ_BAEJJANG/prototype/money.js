@@ -17,11 +17,19 @@ class Money{
 	}
 
 	checkTouch(x, y){
-		return (dist(x, this.posX, y, this.posY) < 10);
+		let d = dist(x, y, this.posX, this.posY)
+		if(d < 30){
+			print(d);
+		}
+		return (dist(x, y, this.posX, this.posY) < 30);
 	}
 	
 	checkOutofScreen(){
 		return (this.posY > height);
+	}
+
+	getScore(){
+		return this.score;
 	}
 
 	display(){

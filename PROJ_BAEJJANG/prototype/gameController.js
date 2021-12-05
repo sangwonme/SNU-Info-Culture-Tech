@@ -9,7 +9,7 @@ class GameController{
         this.mouseDownX = 0;
         this.mouseDownY = 0;
         this.mouseUpX = 0;
-        this.mouseUpY = 0;
+        this.mouseUpY = 0; 
         // player
         this.player = new Player(graphicAssets['player']);
         // graphic assets
@@ -39,7 +39,7 @@ class GameController{
         this.bgm.play();
         // score
         this.score = 0;
-        this.combo = 0;
+        this.combo = 45;
         this.phase = 0;
     }
 
@@ -99,10 +99,6 @@ class GameController{
 
     // Judge user input if it's correct or not
     judgeInput(inputType, inputKey){
-        // break if it's money phase
-        if(this.phase == 3){
-            return;
-        }
         // if it's playing phase i.e. 0~2
         let inputAction;
         this.stopAllSounds();
@@ -125,12 +121,12 @@ class GameController{
             if(inputAction == 7){
                 inputAction = 1;
             }
-            this.combo += 1;
-            this.setPhase();
             this.setLightColor();
             this.lightOpacity = 100;
             this.notes[inputAction-1].play();
             this.player.playerCorrect(inputAction);
+            this.combo += 1;
+            this.setPhase();
             this.shiftQueue();
         }
         // wrong
@@ -155,9 +151,11 @@ class GameController{
             if(this.phase < 3){
                 this.fail();
             }else{
-                this.combo = 0;
+                this.combo += 1;
                 this.setPhase();
-                this.player.playerCorrect(1);
+                this.moneys = [];
+                this.player.setStatus(1);
+                this.player.initPos();
                 this.timer = 100;
             }
         }
@@ -179,18 +177,23 @@ class GameController{
 
     // change phase
     setPhase(){
-        if(this.combo < 10){
+        if(this.combo == 0 || (0 < this.combo % 50  && this.combo % 50 < 10)){
             this.phase = 0;
         }
-        else if(9 < this.combo && this.combo <= 29){
+        else if(9 < this.combo % 50 && this.combo % 50 <= 29){
             this.phase = 1;
         }
-        else if(29 < this.combo && this.combo <= 49){
+        else if(29 < this.combo % 50 && this.combo % 50 <= 49){
             this.phase = 2;
         }
         else{
+            this.player.setStatus(7);
             this.phase = 3;
         }
+    }
+
+    getPhase(){
+        return this.phase;
     }
 
     addMoney(){
@@ -213,9 +216,23 @@ class GameController{
         this.lightOpacity -= 5;
 
         // show fire
-        this.fire.setPhase(this.phase);
+        let firePhase;
+        if(this.combo > 50){
+            firePhase = 2;
+        }else{
+            firePhase = this.phase;
+        }
+        this.fire.setPhase(firePhase);
         this.fire.display();
         // show player
+        if(this.phase == 3){
+            if(keyIsDown(65)){
+                this.player.moveLeft();
+            }
+            if(keyIsDown(68)){
+                this.player.moveRight();
+            }
+        }
         this.player.display();
 
         // throw garbages
@@ -253,13 +270,18 @@ class GameController{
             this.addMoney();
             for(let i = 0; i < this.moneys.length; i++){
                 this.moneys[i].display();
+                let touched = this.moneys[i].checkTouch(this.player.getBasketPos()[0], this.player.getBasketPos()[1]);
+                if(touched){
+                    this.moneys.splice(i, 1);
+                    i -= 1;
+                }
             }
+            // this.moneys = this.moneys.splice(touchedIdx, 1);
             if(this.moneys.length > 1){
                 if(this.moneys[0].checkOutofScreen()){
                     this.moneys.shift();
                 }
             }
-            print(this.moneys.length);
             // light
             noStroke();
             if(frameCount % 30 == 0){

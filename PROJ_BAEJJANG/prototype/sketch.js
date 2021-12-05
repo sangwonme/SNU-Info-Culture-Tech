@@ -16,7 +16,7 @@ let soundEffects = {};
 function preload(){
   // load images
   let playerImgs = [];
-  for(let i = 0; i <= 6; i++){
+  for(let i = 0; i <= 7; i++){
     playerImgs.push(loadImage('./assets/graphic/p' + i + '_1.png'));
     playerImgs.push(loadImage('./assets/graphic/p' + i + '_2.png'));
   }
@@ -72,16 +72,22 @@ function setup() {
 }
 
 function keyPressed(){
-  gameController.judgeInput('KEY', keyCode);
+  if(gameController.getPhase() != 3 && (49 <= keyCode && keyCode <= 52 || keyCode == 55)){
+    gameController.judgeInput('KEY', keyCode);
+  }
 }
 
 function mousePressed(){
-  gameController.updateMousePos(mouseX, mouseY, 'PRESS');
+  if(gameController.getPhase() != 3){
+    gameController.updateMousePos(mouseX, mouseY, 'PRESS');
+  }
 }
 
 function mouseReleased(){
-  gameController.updateMousePos(mouseX, mouseY, 'RELEASE');
-  gameController.judgeInput('MOUSE', 0);
+  if(gameController.getPhase() != 3){
+    gameController.updateMousePos(mouseX, mouseY, 'RELEASE');
+    gameController.judgeInput('MOUSE', 0);
+  }
 }
 
 function draw() {
