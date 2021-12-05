@@ -1,23 +1,37 @@
 class GameController{
     constructor(gamefont, graphicAssets, soundEffects){
+        // score
+        this.score = 0;
+        this.combo = 0;
+        this.phase = 0;
+        // timer
+        this.timer = 100;
+        this.freeze = true;
+        // end game
+        this.readyEnd = false;
+        this.actionEnd = false;
+        this.finalEnd = false;
+        // light opacity
+        this.lightOpacity = 0;
+        this.lightColor = [0, 0, 0];
         // init actionQueue
         this.actionQueue = [];
         this.initQueue();
-        // font
-        this.gamefont = gamefont;
         // mouse event
         this.mouseDownX = 0;
         this.mouseDownY = 0;
         this.mouseUpX = 0;
         this.mouseUpY = 0; 
-        // player
-        this.player = new Player(graphicAssets['player']);
+        // font
+        this.gamefont = gamefont;
         // graphic assets
         this.garbageImgs = graphicAssets['garbage'];
         this.moneyImgs = graphicAssets['money'];
         this.stageImg = graphicAssets['stage'];
         this.queueImg = graphicAssets['queuebar'];
         this.comboboxImg = graphicAssets['combobox'];
+        // player
+        this.player = new Player(graphicAssets['player']);
         // objects
         this.garbages = [];
         this.moneys = [];
@@ -32,26 +46,34 @@ class GameController{
         this.noise = soundEffects['noise'];
         this.coins = soundEffects['coins'];
         this.initVolume();
-        // timer
-        this.timer = 100;
-        // light opacity
-        this.lightOpacity = 0;
-        this.lightColor = [0, 0, 0];
         // play bgm
         this.bgm.play();
-        // score
-        this.score = 0;
-        this.combo = 0;
-        this.phase = 0;
-        // end game
-        this.readyEnd = false;
-        this.actionEnd = false;
-        this.finalEnd = false;
     }
 
     // reset class var for replay
     initClassVar(){
-
+        // score
+        this.score = 0;
+        this.combo = 0;
+        this.phase = 0;
+        // timer
+        this.timer = 100;
+        this.freeze = true;
+        // end game
+        this.readyEnd = false;
+        this.actionEnd = false;
+        this.finalEnd = false;
+        // light opacity
+        this.lightOpacity = 0;
+        this.lightColor = [0, 0, 0];
+        // init actionQueue
+        this.initQueue();
+        // play bgm
+        this.bgmVolume = 0.5;
+        // audio mixing
+        this.initVolume();
+        // play bgm
+        this.bgm.play();
     }
 
     // end game
@@ -168,6 +190,7 @@ class GameController{
             this.fail();
         }
         this.timer = 100;
+        this.freeze = false;
     }
 
     // play timer
@@ -181,6 +204,10 @@ class GameController{
         }
         // if end just stop timer
         if(this.actionEnd){
+            timerSpeed = 0;
+        }
+        // if freeze stop timer
+        if(this.freeze){
             timerSpeed = 0;
         }
         this.timer -= timerSpeed;
@@ -260,6 +287,7 @@ class GameController{
         }
         if(this.bgmVolume < 0.01){
             this.bgmVolume = 0;
+            this.bgm.stop();
             this.finalEnd = true;
         }
 

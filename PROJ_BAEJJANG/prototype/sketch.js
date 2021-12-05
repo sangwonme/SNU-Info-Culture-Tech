@@ -111,6 +111,9 @@ function mousePressed(){
   }
   else if(currentScene == 'END_TOON'){
     endToon.increaseIdx();
+    if(endToon.getRestartReady()){
+      onTransition();
+    }
   }
 }
 
@@ -128,9 +131,18 @@ function changeScene(){
       startTime = [minute(), second()];
       break;
     case 'GAME' :
+      gameScore = gameController.getFinalScore();
+      if(gameScore > 20000){
+        endToon.setToon(endToonBImgs, gameScore);
+      }else{
+        endToon.setToon(endToonCImgs, gameScore);
+      }
       currentScene = 'END_TOON';
       break;
     case 'END_TOON' :
+      gameController.initClassVar();
+      startTime[0] = minute();
+      startTime[1] = second();
       currentScene = 'GAME';
       break;
   }
@@ -154,12 +166,6 @@ function draw() {
       }
       // if gameController is ended
       if(gameController.getFinalEnd() && !inTransition){
-        gameScore = gameController.getFinalScore();
-        if(gameScore > 20000){
-          endToon.setToon(endToonBImgs, gameScore);
-        }else{
-          endToon.setToon(endToonCImgs, gameScore);
-        }
         onTransition();
       }
       break;
@@ -169,9 +175,10 @@ function draw() {
       break;
   }
   // transition : go black and when black change the scene.
+  print(blackOpacity);
   if(inTransition){
     blackOpacity += 3;
-    if(blackOpacity == 300){
+    if(blackOpacity > 300){
       offTransition();
       changeScene();
     }
