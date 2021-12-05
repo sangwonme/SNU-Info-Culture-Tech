@@ -28,7 +28,6 @@ class Garbage{
         rotate(this.ang);
         imageMode(CENTER);
         image(this.img, 0, 0, 50, 50);
-        // translate(-this.posX, -this.posY);
         pop();
         // dynamic update
         this.velY += this.gravity;
