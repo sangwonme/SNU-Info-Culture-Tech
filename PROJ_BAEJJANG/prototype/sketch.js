@@ -15,10 +15,12 @@ let gamefont;
 let soundEffects = {};
 
 // toons
+let introToonImgs = [];
 let endToonAImgs = [];
 let endToonBImgs = [];
 let endToonCImgs = [];
 let endToonFImgs = [];
+let introToon;
 let endToon;
 
 // gameplay time
@@ -85,6 +87,9 @@ function preload(){
   soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
   soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
   // load toons
+  for(let i = 1; i <= 7; i++){
+    introToonImgs.push(loadImage('./assets/toon/intro' + i + '.jpeg'));
+  }
   for(let i = 1; i <= 4; i++){
     endToonBImgs.push(loadImage('./assets/toon/toon_b_' + i + '.jpg'));
     endToonCImgs.push(loadImage('./assets/toon/toon_c_' + i + '.jpg'));
@@ -93,10 +98,9 @@ function preload(){
 
 function setup() {
   createCanvas(843, 596);
-  gameController = new GameController(gamefont, graphicAssets, soundEffects);
+  introToon = new Toon();
+  introToon.setToon(introToonImgs, -999);
   endToon = new Toon();
-  // only for debug
-  changeScene();
 }
 
 function keyPressed(){
@@ -106,12 +110,15 @@ function keyPressed(){
 }
 
 function mousePressed(){
-  if(currentScene == 'GAME' && gameController.getPhase() != 3){
+  if(currentScene == 'START_TOON'){
+    introToon.increaseIdx();
+  }
+  else if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'PRESS');
   }
   else if(currentScene == 'END_TOON'){
     endToon.increaseIdx();
-    if(endToon.getRestartReady()){
+    if(endToon.getReadyToStart()){
       onTransition();
     }
   }
@@ -127,7 +134,8 @@ function mouseReleased(){
 function changeScene(){
   switch(currentScene){
     case 'START_TOON' :
-      currentScene = 'GAME';
+      currentScene = 'GAME'; 
+      gameController = new GameController(gamefont, graphicAssets, soundEffects);
       startTime = [minute(), second()];
       break;
     case 'GAME' :
@@ -158,6 +166,13 @@ function offTransition(){
 function draw() {
   // draw scene
   switch(currentScene){
+    case 'START_TOON' :
+      background(255);
+      introToon.display();
+      if(introToon.getReadyToStart()){
+        onTransition();
+      }
+      break;
     case 'GAME' : 
       gameController.display();
       // end timing
