@@ -31,7 +31,11 @@ class Toon{
     // show cartoon
     noStroke();
     imageMode(CENTER);
-    image(this.toonImgs[this.idx], width/2, height/2, width, height);
+    image(this.toonImgs[this.idx], width/2, height/2, 810, 540);
+    // only for test play
+    if(this.idx == 6){
+      image(this.toonImgs[this.idx], width/2, height/2, width, height);
+    }
     // when end cut
     if(this.endCut){
       // intro toon
