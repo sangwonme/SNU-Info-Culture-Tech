@@ -87,7 +87,7 @@ function preload(){
   soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
   soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
   // load toons
-  for(let i = 1; i <= 6; i++){
+  for(let i = 1; i <= 7; i++){
     introToonImgs.push(loadImage('./assets/toon/intro' + i + '.jpeg'));
   }
   for(let i = 1; i <= 4; i++){
@@ -98,12 +98,9 @@ function preload(){
 
 function setup() {
   createCanvas(843, 596);
-  gameController = new GameController(gamefont, graphicAssets, soundEffects);
-  introToon = newToon();
+  introToon = new Toon();
   introToon.setToon(introToonImgs, -999);
   endToon = new Toon();
-  // only for debug
-  changeScene();
 }
 
 function keyPressed(){
@@ -115,9 +112,6 @@ function keyPressed(){
 function mousePressed(){
   if(currentScene == 'START_TOON'){
     introToon.increaseIdx();
-    if(introToon.getReadyToStart()){
-      onTransition();
-    }
   }
   else if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'PRESS');
@@ -140,7 +134,8 @@ function mouseReleased(){
 function changeScene(){
   switch(currentScene){
     case 'START_TOON' :
-      currentScene = 'GAME';
+      currentScene = 'GAME'; 
+      gameController = new GameController(gamefont, graphicAssets, soundEffects);
       startTime = [minute(), second()];
       break;
     case 'GAME' :
@@ -174,6 +169,9 @@ function draw() {
     case 'START_TOON' :
       background(255);
       introToon.display();
+      if(introToon.getReadyToStart()){
+        onTransition();
+      }
       break;
     case 'GAME' : 
       gameController.display();

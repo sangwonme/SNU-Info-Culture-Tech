@@ -45,6 +45,9 @@ class Toon{
         fill(255);
         textSize(30);
         text('다시', width-70, height-70);
+        // show score
+        fill(0);
+        text('당신의 점수는 ' + this.score + '점', width/2, height-50);
         // when mouse is on button get ready sign else non-ready
         if(width-100 < mouseX && mouseX < width-40 && height-100 < mouseY && mouseY < height-40){
           this.readyToStart = true;
