@@ -179,7 +179,7 @@ class GameController{
             this.player.playerCorrect(inputAction);
             this.combo += 1;
             this.setPhase();
-            this.score += (this.phase + 1) * 100;
+            this.score += (parseInt(this.combo/50) + this.phase + 1) * 100;
             this.shiftQueue();
             if(this.actionQueue.length == 0){
                 this.endMusic();
