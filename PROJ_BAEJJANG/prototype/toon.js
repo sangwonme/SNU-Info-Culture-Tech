@@ -54,7 +54,6 @@ class Toon{
         }else{
           this.readyToStart = false;
         }
-
       }
     }
   }
