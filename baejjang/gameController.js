@@ -179,7 +179,7 @@ class GameController{
             this.player.playerCorrect(inputAction);
             this.combo += 1;
             this.setPhase();
-            this.score += (parseInt(this.combo/50) + this.phase + 1) * 100;
+            this.score += (parseInt(this.combo/25)*3 + this.phase + 1) * 100;
             this.shiftQueue();
             if(this.actionQueue.length == 0){
                 this.endMusic();
@@ -189,6 +189,7 @@ class GameController{
         else{
             this.fail();
         }
+        // reset timer
         this.timer = 100;
         this.freeze = false;
     }
@@ -222,6 +223,7 @@ class GameController{
                 this.player.setStatus(1);
                 this.player.initPos();
                 this.timer = 100;
+                this.freeze = true;
             }
         }
 
@@ -245,13 +247,13 @@ class GameController{
 
     // change phase
     setPhase(){
-        if(this.combo == 0 || (0 < this.combo % 50  && this.combo % 50 < 10)){
+        if(this.combo == 0 || (0 < this.combo % 25  && this.combo % 25 <= 4)){
             this.phase = 0;
         }
-        else if(9 < this.combo % 50 && this.combo % 50 <= 29){
+        else if(4 < this.combo % 25 && this.combo % 25 <= 14){
             this.phase = 1;
         }
-        else if(29 < this.combo % 50 && this.combo % 50 <= 49){
+        else if(14 < this.combo % 25 && this.combo % 25 <= 25){
             this.phase = 2;
         }
         else if(this.readyEnd){
@@ -270,7 +272,7 @@ class GameController{
     addMoney(){
         if(frameCount % 50 == 0){
             let tmp = int(random(1, 3));
-            this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 250*tmp));
+            this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 500*tmp));
         }
     }
 
