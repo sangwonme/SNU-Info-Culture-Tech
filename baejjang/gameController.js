@@ -180,14 +180,15 @@ class GameController{
             this.combo += 1;
             this.setPhase();
             this.score += (parseInt(this.combo/25)*3 + this.phase + 1) * 100;
-            this.shiftQueue();
-            if(this.actionQueue.length == 0){
-                this.endMusic();
-            }
         }
         // wrong
         else{
             this.fail();
+        }
+        // shift queue
+        this.shiftQueue();
+        if(this.actionQueue.length == 0){
+            this.endMusic();
         }
         // reset timer
         this.timer = 100;
