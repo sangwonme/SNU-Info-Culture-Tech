@@ -19,24 +19,20 @@ class Player{
     }
 
     moveLeft(){
-        this.playerStatus = 8;
+        if(this.playerStatus != 8){
+            this.setStatus(8);
+        }
         this.posX -= 5;
-        this.idx = 15;
     }
     moveRight(){
-        this.playerStatus = 7;
+        if(this.playerStatus != 7){
+            this.setStatus(7);
+        }
         this.posX += 5;
-        this.idx = 14;
     }
     setStatus(status){
         this.playerStatus = status;
         this.idx = status * 2;
-        if(status == 7){
-            this.idx = 14;
-        }
-        else if(status == 8){
-            this.idx = 15;
-        }
     }
     
     initPos(){
@@ -58,7 +54,7 @@ class Player{
     }
 
     display(){
-        if(this.playerStatus <= 6 && frameCount % 8 == 0){
+        if(frameCount % 8 == 0){
             if(this.idx % 2 == 0){
                 this.idx += 1;
             }else{

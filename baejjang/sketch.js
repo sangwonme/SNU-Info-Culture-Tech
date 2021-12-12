@@ -33,7 +33,7 @@ let inTransition = false;
 function preload(){
   // load images
   let playerImgs = [];
-  for(let i = 0; i <= 7; i++){
+  for(let i = 0; i <= 8; i++){
     playerImgs.push(loadImage('./assets/graphic/p' + i + '_1.png'));
     playerImgs.push(loadImage('./assets/graphic/p' + i + '_2.png'));
   }
