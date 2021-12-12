@@ -95,13 +95,13 @@ function preload(){
   soundEffects['bgm'] = loadSound('./assets/audio/bgm.mp3');
   soundEffects['noise'] = loadSound('./assets/audio/amp_noise.mp3');
   // load toons
-  for(let i = 1; i <= 7; i++){
-    introToonImgs.push(loadImage('./assets/toon/intro' + i + '.jpeg'));
+  for(let i = 1; i <= 17; i++){
+    introToonImgs.push(loadImage('./assets/toon/intro/intro' + i + '.png'));
   }
-  for(let i = 1; i <= 4; i++){
-    endToonBImgs.push(loadImage('./assets/toon/toon_b_' + i + '.jpg'));
-    endToonCImgs.push(loadImage('./assets/toon/toon_c_' + i + '.jpg'));
-  }
+  // for(let i = 1; i <= 4; i++){
+  //   endToonBImgs.push(loadImage('./assets/toon/toon_b_' + i + '.jpg'));
+  //   endToonCImgs.push(loadImage('./assets/toon/toon_c_' + i + '.jpg'));
+  // }
 }
 
 function setup() {

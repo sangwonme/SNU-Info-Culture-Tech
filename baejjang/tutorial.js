@@ -28,7 +28,7 @@ class Tutorial{
 		this.coins = soundEffects['coins'];
 		this.initVolume();
 		// comment
-		this.comment = '1,2,3,4 자판 상단의 해당 숫자 키보드를 누르세요.'
+		this.comment = '1,2,3,4 자판 상단의 해당 숫자 키보드를 눌러보세요.'
 		// end
 		this.end = false;
 	}
@@ -166,19 +166,19 @@ class Tutorial{
 				this.player.setStatus(int(random(1, 7)));
 			}
 			this.initQueueNum();
-			this.comment = '1,2,3,4 자판 상단의 해당 숫자 키보드를 누르세요.';
+			this.comment = '1,2,3,4 자판 상단의 해당 숫자 키보드를 눌러보세요.';
 		}
 		else if(this.page == 2){
 			if(this.player.getStatus() == 7 || this.player.getStatus() == 8){
 				this.player.setStatus(int(random(1, 7)));
 			}
 			this.initQueueArr();
-			this.comment = '무대 위쪽에서 마우스 좌클릭을 한 상태로 \n마우스를 위/아래로 움직이고 떼세요.';
+			this.comment = '무대 위쪽에서 마우스 좌클릭을 한 상태로 \n마우스를 위/아래로 움직이고 떼보세요.';
 		}
 		else if(this.page == 3){
 			this.moneys = [];
 			this.player.setStatus(7);
-			this.comment = '피버타임에는 a/d키로 베짱이를 좌우로 움직여\n하늘에서 떨어지는 돈을 받으세요.';
+			this.comment = '피버타임에는 a/d키로 베짱이를 좌우로 움직여보고\n하늘에서 떨어지는 돈을 받아보세요.';
 		}
 		else{
 			this.player.setStatus(int(random(1, 7)));
@@ -324,6 +324,7 @@ class Tutorial{
 			else{
 				textSize(30);
 			}
+			fill(255, 0, 0);
 			text('시작', width-60, height - 50);
 			if(dist(mouseX, mouseY, 60, height-50) < 30){
 				textSize(45);
@@ -331,11 +332,13 @@ class Tutorial{
 			else{
 				textSize(30);
 			}
+			fill(0);
 			text('이전', 60, height - 50);
 		}
 
 		// comment
 		textSize(30);
+		text('튜토리얼', width/2, 60);
 		text(this.comment, width/2, height-100);
 	}
 }
