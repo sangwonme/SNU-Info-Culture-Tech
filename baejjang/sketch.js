@@ -45,6 +45,10 @@ function preload(){
   for(let i = 1; i <= 2; i++){
     moneyImgs.push(loadImage('./assets/graphic/money' + i + '.png'));
   }
+  let antImgs = [];
+  for(let i = 1; i <= 3; i++){
+    antImgs.push(loadImage('./assets/graphic/ant' + i + '.png'));
+  }
   let speakerImgs = [];
   for(let i = 1; i <= 3; i++){
     speakerImgs.push(loadImage('./assets/graphic/speaker' + i + '.png'));
@@ -60,6 +64,7 @@ function preload(){
   graphicAssets['player'] = playerImgs;
   graphicAssets['garbage'] = garbageImgs;
   graphicAssets['money'] = moneyImgs;
+  graphicAssets['ant'] = antImgs;
   graphicAssets['speaker'] = speakerImgs;
   graphicAssets['smallfire'] = smallfireImgs;
   graphicAssets['combofire'] = combofireImgs;
@@ -190,7 +195,6 @@ function draw() {
       break;
   }
   // transition : go black and when black change the scene.
-  print(blackOpacity);
   if(inTransition){
     blackOpacity += 3;
     if(blackOpacity > 300){

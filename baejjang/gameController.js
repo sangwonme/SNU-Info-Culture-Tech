@@ -27,6 +27,7 @@ class GameController{
         // graphic assets
         this.garbageImgs = graphicAssets['garbage'];
         this.moneyImgs = graphicAssets['money'];
+        this.antImgs = graphicAssets['ant'];
         this.stageImg = graphicAssets['stage'];
         this.queueImg = graphicAssets['queuebar'];
         this.comboboxImg = graphicAssets['combobox'];
@@ -35,6 +36,8 @@ class GameController{
         // objects
         this.garbages = [];
         this.moneys = [];
+        this.ant = [];
+        this.stoppedAnts = 0;
         this.speaker = new Speaker(graphicAssets['speaker']);
         this.fire = new Fire(graphicAssets['smallfire'], graphicAssets['combofire'], 0);
         // bgm
@@ -63,6 +66,9 @@ class GameController{
         this.readyEnd = false;
         this.actionEnd = false;
         this.finalEnd = false;
+        // objects
+        this.ant = [];
+        this.stoppedAnts = 0;
         // light opacity
         this.lightOpacity = 0;
         this.lightColor = [0, 0, 0];
@@ -266,16 +272,30 @@ class GameController{
         }
     }
 
+    // get phase
     getPhase(){
         return this.phase;
     }
 
+    // add new money to list
     addMoney(){
         if(frameCount % 50 == 0){
             let tmp = int(random(1, 3));
             this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 500*tmp));
         }
     }
+
+    // sort ant
+    sortAnt(a, b){
+        if(a.getPosY() < b.getPosY()){
+            return -1;
+        }
+        if(a.getPosY() > b.getPosY()){
+            return 1;
+        }
+        return 0;
+    }
+
 
     // display assets
     display(){
@@ -293,7 +313,6 @@ class GameController{
             this.bgm.stop();
             this.finalEnd = true;
         }
-
 
         // stage img
         image(this.stageImg, 0, 0, 843, 596);
@@ -314,6 +333,7 @@ class GameController{
         }
         this.fire.setPhase(firePhase);
         this.fire.display();
+
         // show player
         if(this.phase == 3){
             if(keyIsDown(65)){
@@ -329,7 +349,29 @@ class GameController{
         for(let i = 0; i < this.garbages.length; i++){
             this.garbages[i].display();
         }
+
+        // ants
+        if(frameCount % 100 == 0){
+            this.ant.push(new Ant(this.antImgs, pow(-1, int(random(1, 3)))));
+            this.ant.sort(this.sortAnt);
+        }
+        for(let i = 0; i < this.ant.length; i++){
+            if(parseInt(this.score/2500) > this.stoppedAnts){
+                if(!this.ant[i].getStop()){
+                    this.ant[i].stopAnt();
+                    this.stoppedAnts += 1;
+                }
+            }
+            // display ant
+            this.ant[i].display();
+            // delete ant
+            if(this.ant[i].checkOutofScreen()){
+                this.ant.splice(i, 1);
+                i -= 1;
+            }
+        }
         
+        imageMode(CORNER);
         if(this.phase < 3){            
             // queue img
             image(this.queueImg, 0, -20, 843, 190);
@@ -362,7 +404,7 @@ class GameController{
                 this.moneys[i].display();
                 let touched = this.moneys[i].checkTouch(this.player.getBasketPos()[0], this.player.getBasketPos()[1]);
                 if(touched){
-                    this.score += this.moneys[i].getScore();
+                    this.score += this.moneys[i].getScore(); 
                     this.coins[int(random(0, 3))].play();
                     this.moneys.splice(i, 1);
                     i -= 1;
