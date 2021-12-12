@@ -335,7 +335,7 @@ class GameController{
 
         // show fire
         let firePhase;
-        if(this.combo > 50){
+        if(this.combo > 25){
             firePhase = 2;
         }else{
             firePhase = this.phase;
