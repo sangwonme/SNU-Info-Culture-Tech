@@ -98,7 +98,17 @@ class GameController{
 
     // generate random action
     generateAction(){
-        return int(random(1,7));
+        let actionNum = int(random(1,7));
+        if(this.actionQueue.length > 0){
+            let lastActionNum = this.actionQueue[this.actionQueue.length - 1];
+            if(lastActionNum == 5 && actionNum == 5){
+                actionNum = 6;
+            }
+            else if(lastActionNum == 6 && actionNum == 6){
+                actionNum = 5;
+            }
+        }
+        return actionNum;
     }
 
     // init action queue
