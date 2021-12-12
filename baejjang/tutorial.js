@@ -182,7 +182,7 @@ class Tutorial{
 		}
 		else{
 			this.player.setStatus(int(random(1, 7)));
-			this.comment = 'PC/노트북을 사용하여 플레이해주세요. \n게임이 시작되면 음악이 나옵니다. 볼륨을 미리 조절해주세요. \n마우스 사용을 권장합니다.';
+			this.comment = '연주는 1분간 이어집니다. \n게임이 시작되면 음악이 나옵니다. 볼륨을 미리 조절해주세요. \n마우스 사용을 권장합니다.';
 		}
 	}
 	goNextPage(){
