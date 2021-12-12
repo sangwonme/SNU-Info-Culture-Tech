@@ -360,12 +360,12 @@ class GameController{
         }
 
         // ants
-        if(frameCount % 100 == 0){
+        if(frameCount % 200 == 0){
             this.ant.push(new Ant(this.antImgs, pow(-1, int(random(1, 3)))));
             this.ant.sort(this.sortAnt);
         }
         for(let i = 0; i < this.ant.length; i++){
-            if(parseInt(this.score/2500) > this.stoppedAnts){
+            if(parseInt(this.score/5000) > this.stoppedAnts){
                 if(!this.ant[i].getStop()){
                     this.ant[i].stopAnt();
                     this.stoppedAnts += 1;
