@@ -1,6 +1,9 @@
 // scene
 let currentScene = 'START_TOON';
 
+// tutorial Scene
+let tutorial;
+
 // game controller
 let gameController;
 let gameScore;
@@ -109,7 +112,10 @@ function setup() {
 }
 
 function keyPressed(){
-  if(currentScene == 'GAME' && gameController.getPhase() != 3 && (49 <= keyCode && keyCode <= 52 || keyCode == 55)){
+  if(currentScene == 'TUTORIAL'){
+    tutorial.judgeInput('KEY', keyCode);
+  }
+  else if(currentScene == 'GAME' && gameController.getPhase() != 3 && (49 <= keyCode && keyCode <= 52 || keyCode == 55)){
     gameController.judgeInput('KEY', keyCode);
   }
 }
@@ -117,6 +123,9 @@ function keyPressed(){
 function mousePressed(){
   if(currentScene == 'START_TOON'){
     introToon.increaseIdx();
+  }
+  else if(currentScene == 'TUTORIAL'){
+    
   }
   else if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'PRESS');
@@ -139,7 +148,11 @@ function mouseReleased(){
 function changeScene(){
   switch(currentScene){
     case 'START_TOON' :
-      currentScene = 'GAME'; 
+      currentScene = 'TUTORIAL'; 
+      tutorial = new Tutorial(gamefont, graphicAssets, soundEffects);
+      break;
+    case 'TUTORIAL' :
+      currentScene = 'GAME';
       gameController = new GameController(gamefont, graphicAssets, soundEffects);
       startTime = [minute(), second()];
       break;
@@ -177,6 +190,10 @@ function draw() {
       if(introToon.getReadyToStart()){
         onTransition();
       }
+      break;
+    case 'TUTORIAL' :
+      background(255);
+      tutorial.display();
       break;
     case 'GAME' : 
       gameController.display();

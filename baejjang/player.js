@@ -1,7 +1,7 @@
 class Player{
-    constructor(imgs){
+    constructor(imgs, size){
         this.playerImgs = imgs;
-        this.size = 220;
+        this.size = 220 * size;
         this.playerStatus = 1;
         this.idx = this.playerStatus * 2;
         this.posX = 0;

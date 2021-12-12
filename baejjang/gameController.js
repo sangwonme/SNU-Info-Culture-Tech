@@ -32,7 +32,7 @@ class GameController{
         this.queueImg = graphicAssets['queuebar'];
         this.comboboxImg = graphicAssets['combobox'];
         // player
-        this.player = new Player(graphicAssets['player']);
+        this.player = new Player(graphicAssets['player'], 1);
         // objects
         this.garbages = [];
         this.moneys = [];
