@@ -113,7 +113,7 @@ class GameController{
 
     // init action queue
     initQueue(){
-        for(let i = 0; i < 11; i++){
+        for(let i = 0; i < 4; i++){
             this.actionQueue.push(this.generateAction());
         }
     }
@@ -380,10 +380,11 @@ class GameController{
             }
         }
         
-        imageMode(CORNER);
         if(this.phase < 3){            
             // queue img
-            image(this.queueImg, 0, -20, 843, 190);
+            imageMode(CENTER);
+            image(this.queueImg, width/2, 70, 335, 95);
+            imageMode(CORNER);
             // show actions queue
             for(let i = 0; i < this.actionQueue.length; i++){
                 if(i == 0){
@@ -403,7 +404,7 @@ class GameController{
                 else if(action ==6){
                     action = '↓';
                 }
-                text(action, 60+width*(i/12), height*0.1);
+                text(action, 300+950*(i/12), height*0.1+7);
             }
         }
         else{
@@ -439,10 +440,13 @@ class GameController{
         // show timer
         noStroke();
         fill(182,64,62);
-        rect(40, 15, this.timer*7.7, 10);
+        rectMode(CENTER);
+        rect(width/2, 15, this.timer*7.7, 10);
+        rectMode(CORNER);
         this.playTimer();
 
         // show combo & score
+        imageMode(CORNER);
         image(this.comboboxImg, 15, 480, 150, 100);
         fill(0);
         noStroke();
