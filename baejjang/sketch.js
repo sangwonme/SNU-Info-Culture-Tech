@@ -125,7 +125,15 @@ function mousePressed(){
     introToon.increaseIdx();
   }
   else if(currentScene == 'TUTORIAL'){
-    
+    if(dist(mouseX, mouseY, width-60, height-50) < 30){
+      tutorial.goNextPage();
+    }
+    else if(dist(mouseX, mouseY, 60, height-50) < 30){
+      tutorial.goPrevPage();
+    }
+    else{
+      tutorial.updateMousePos(mouseX, mouseY, 'PRESS');
+    }
   }
   else if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'PRESS');
@@ -139,7 +147,13 @@ function mousePressed(){
 }
 
 function mouseReleased(){
-  if(currentScene == 'GAME' && gameController.getPhase() != 3){
+  if(currentScene == 'TUTORIAL'){
+    if(dist(mouseX, mouseY, width-60, height-50) > 30 && dist(mouseX, mouseY, 60, height-50) > 30){
+      tutorial.updateMousePos(mouseX, mouseY, 'RELEASE');
+      tutorial.judgeInput('MOUSE', 0);
+    }
+  }
+  else if(currentScene == 'GAME' && gameController.getPhase() != 3){
     gameController.updateMousePos(mouseX, mouseY, 'RELEASE');
     gameController.judgeInput('MOUSE', 0);
   }
@@ -194,6 +208,9 @@ function draw() {
     case 'TUTORIAL' :
       background(255);
       tutorial.display();
+      if(tutorial.getEnd()){
+        onTransition();
+      }
       break;
     case 'GAME' : 
       gameController.display();

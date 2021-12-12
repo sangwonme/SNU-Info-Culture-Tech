@@ -1,5 +1,5 @@
 class Money{
-  constructor(img, ratio, score){
+  constructor(img, ratio, score, size){
 		this.img = img;
 		this.score = score;
 		this.ratio = ratio;
@@ -7,7 +7,7 @@ class Money{
 		this.posY = -10;
 		this.velX = 0;
 		this.velY = 2.3;
-		this.size = 60
+		this.size = 60 * size;
 	}
 
 	move(){
@@ -21,7 +21,7 @@ class Money{
 		if(d < 30){
 			print(d);
 		}
-		return (dist(x, y, this.posX, this.posY) < 30);
+		return (dist(x, y, this.posX, this.posY) < 40);
 	}
 	
 	checkOutofScreen(){

@@ -290,7 +290,7 @@ class GameController{
     addMoney(){
         if(frameCount % 50 == 0){
             let tmp = int(random(1, 3));
-            this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 1000*tmp));
+            this.moneys.push(new Money(this.moneyImgs[tmp-1], 0.5*tmp, 1000*tmp, 1));
         }
     }
 

@@ -1,6 +1,7 @@
 class Player{
     constructor(imgs, size){
         this.playerImgs = imgs;
+        this.factor = size;
         this.size = 220 * size;
         this.playerStatus = 1;
         this.idx = this.playerStatus * 2;
@@ -22,17 +23,30 @@ class Player{
         if(this.playerStatus != 8){
             this.setStatus(8);
         }
-        this.posX -= 5;
+        if(this.posX > -width/2 && this.factor == 1){
+            this.posX -= 5;
+        }
+        if(this.posX > -width/2 + 160 && this.factor < 1){
+            this.posX -= 5*this.factor;
+        }
     }
     moveRight(){
         if(this.playerStatus != 7){
             this.setStatus(7);
         }
-        this.posX += 5;
+        if(this.posX < width/2 && this.factor == 1){
+            this.posX += 5;
+        }
+        if(this.posX < width/2 - 160 && this.factor < 1){
+            this.posX += 5*this.factor;
+        }
     }
     setStatus(status){
         this.playerStatus = status;
         this.idx = status * 2;
+    }
+    getStatus(){
+        return this.playerStatus;
     }
     
     initPos(){
@@ -50,6 +64,10 @@ class Player{
         }
         let x = this.posX + width/2 + offset;
         let y = this.posY + 160;
+        if(this.factor < 1){
+            x -= 20;
+            y += 20;
+        }
         return [x, y];
     }
 
