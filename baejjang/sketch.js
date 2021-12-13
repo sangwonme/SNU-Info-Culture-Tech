@@ -7,6 +7,7 @@ let tutorial;
 // game controller
 let gameController;
 let gameScore;
+let difficulty = 30000;
 
 // immages
 let graphicAssets = {};
@@ -174,8 +175,10 @@ function mouseReleased(){
 function changeScene(){
   switch(currentScene){
     case 'START_TOON' :
-      currentScene = 'TUTORIAL'; 
-      tutorial = new Tutorial(gamefont, graphicAssets, soundEffects);
+      currentScene = 'END_TOON';
+      endToon.setToon(endToonFImgs, rankImgs[0], 0, 'F');
+      // currentScene = 'TUTORIAL'; 
+      // tutorial = new Tutorial(gamefont, graphicAssets, soundEffects);
       break;
     case 'TUTORIAL' :
       currentScene = 'GAME';
@@ -184,13 +187,13 @@ function changeScene(){
       break;
     case 'GAME' :
       gameScore = gameController.getFinalScore();
-      if(gameScore > 60000){
+      if(gameScore > difficulty * 3){
         endToon.setToon(endToonAImgs, rankImgs[0], gameScore, 'A');
       }
-      else if(gameScore > 40000){
+      else if(gameScore > difficulty * 2){
         endToon.setToon(endToonBImgs, rankImgs[1], gameScore, 'B');
       }
-      else if(gameScore > 20000){
+      else if(gameScore > difficulty){
         endToon.setToon(endToonCImgs, rankImgs[2], gameScore, 'C');
       }
       else{
