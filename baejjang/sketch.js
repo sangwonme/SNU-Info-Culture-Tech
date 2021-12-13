@@ -65,7 +65,10 @@ function preload(){
   let combofireImgs = [];
   for(let i = 1; i <= 4; i++){
     combofireImgs.push(loadImage('./assets/graphic/combofire' + i + '.png'));
-  }  
+  }
+  let titleImgs = [];
+  titleImgs.push(loadImage('./assets/graphic/title1.png'));
+  titleImgs.push(loadImage('./assets/graphic/title2.png'));
   graphicAssets['player'] = playerImgs;
   graphicAssets['garbage'] = garbageImgs;
   graphicAssets['money'] = moneyImgs;
@@ -73,6 +76,7 @@ function preload(){
   graphicAssets['speaker'] = speakerImgs;
   graphicAssets['smallfire'] = smallfireImgs;
   graphicAssets['combofire'] = combofireImgs;
+  graphicAssets['title'] = titleImgs;
   graphicAssets['queuebar'] = loadImage('./assets/graphic/queuebar.png');
   graphicAssets['combobox'] = loadImage('./assets/graphic/combobox.png');
   graphicAssets['stage'] = loadImage('./assets/graphic/stage.png');
@@ -126,7 +130,9 @@ function setup() {
 
 function keyPressed(){
   if(currentScene == 'TUTORIAL'){
-    tutorial.judgeInput('KEY', keyCode);
+    if(tutorial.getPage() != 0){
+      tutorial.judgeInput('KEY', keyCode);
+    }
   }
   else if(currentScene == 'GAME' && gameController.getPhase() != 3 && (49 <= keyCode && keyCode <= 52 || keyCode == 55)){
     gameController.judgeInput('KEY', keyCode);
@@ -138,14 +144,18 @@ function mousePressed(){
     introToon.increaseIdx();
   }
   else if(currentScene == 'TUTORIAL'){
-    if(dist(mouseX, mouseY, width-60, height-50) < 30){
+    if(tutorial.getPage() == 0){
       tutorial.goNextPage();
-    }
-    else if(dist(mouseX, mouseY, 60, height-50) < 30){
-      tutorial.goPrevPage();
-    }
-    else{
-      tutorial.updateMousePos(mouseX, mouseY, 'PRESS');
+    }else{
+      if(dist(mouseX, mouseY, width-60, height-50) < 30){
+        tutorial.goNextPage();
+      }
+      else if(dist(mouseX, mouseY, 60, height-50) < 30){
+        tutorial.goPrevPage();
+      }
+      else{
+        tutorial.updateMousePos(mouseX, mouseY, 'PRESS');
+      }
     }
   }
   else if(currentScene == 'GAME' && gameController.getPhase() != 3){
@@ -160,7 +170,7 @@ function mousePressed(){
 }
 
 function mouseReleased(){
-  if(currentScene == 'TUTORIAL'){
+  if(currentScene == 'TUTORIAL' && tutorial.getPage() > 1){
     if(dist(mouseX, mouseY, width-60, height-50) > 30 && dist(mouseX, mouseY, 60, height-50) > 30){
       tutorial.updateMousePos(mouseX, mouseY, 'RELEASE');
       tutorial.judgeInput('MOUSE', 0);
@@ -175,10 +185,8 @@ function mouseReleased(){
 function changeScene(){
   switch(currentScene){
     case 'START_TOON' :
-      currentScene = 'END_TOON';
-      endToon.setToon(endToonFImgs, rankImgs[0], 0, 'F');
-      // currentScene = 'TUTORIAL'; 
-      // tutorial = new Tutorial(gamefont, graphicAssets, soundEffects);
+      currentScene = 'TUTORIAL'; 
+      tutorial = new Tutorial(gamefont, graphicAssets, soundEffects);
       break;
     case 'TUTORIAL' :
       currentScene = 'GAME';

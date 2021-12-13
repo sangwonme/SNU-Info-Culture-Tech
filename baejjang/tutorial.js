@@ -3,7 +3,7 @@ class Tutorial{
 		// size factor
 		this.size = 0.75;
 		// page
-		this.page = 1;
+		this.page = 0;
 		// init actionQueue
 		this.actionQueue = [];
 		this.initQueueNum();
@@ -18,6 +18,9 @@ class Tutorial{
 		this.moneyImgs = graphicAssets['money'];
 		this.stageImg = graphicAssets['stage'];
 		this.queueImg = graphicAssets['queuebar'];
+		// title
+		this.titleImgs = graphicAssets['title'];
+		this.titleIdx = 0;
 		// player
 		this.player = new Player(graphicAssets['player'], this.size);
 		// objects
@@ -31,6 +34,10 @@ class Tutorial{
 		this.comment = '1,2,3,4 자판 상단의 해당 숫자 키보드를 눌러보세요.'
 		// end
 		this.end = false;
+	}
+
+	getPage(){
+		return this.page;
 	}
 
 	getEnd(){
@@ -211,6 +218,20 @@ class Tutorial{
 
 	// display
 	display(){
+		// title
+		if(this.page == 0){
+			if(frameCount % 20 == 0){
+				if(this.titleIdx == 0){
+					this.titleIdx = 1;
+				}else{
+					this.titleIdx = 0;
+				}
+			}
+			imageMode(CORNER);
+			image(this.titleImgs[this.titleIdx], 0, 0, width, height);
+			return;
+		}
+
 		// draw stage
 		imageMode(CENTER);
 		image(this.stageImg, width/2, height/2, 843*this.size, 596*this.size);
