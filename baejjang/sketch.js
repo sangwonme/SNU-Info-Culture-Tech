@@ -23,6 +23,7 @@ let endToonAImgs = [];
 let endToonBImgs = [];
 let endToonCImgs = [];
 let endToonFImgs = [];
+let rankImgs = [];
 let introToon;
 let endToon;
 
@@ -98,17 +99,28 @@ function preload(){
   for(let i = 1; i <= 17; i++){
     introToonImgs.push(loadImage('./assets/toon/intro/intro' + i + '.png'));
   }
-  // for(let i = 1; i <= 4; i++){
-  //   endToonBImgs.push(loadImage('./assets/toon/toon_b_' + i + '.jpg'));
-  //   endToonCImgs.push(loadImage('./assets/toon/toon_c_' + i + '.jpg'));
-  // }
+  for(let i = 1; i <= 8; i++){
+    endToonAImgs.push(loadImage('./assets/toon/A/a' + i + '.png'));
+  }
+  for(let i = 1; i <= 11; i++){
+    endToonBImgs.push(loadImage('./assets/toon/B/b' + i + '.png'));
+  }
+  for(let i = 1; i <= 7; i++){
+    endToonCImgs.push(loadImage('./assets/toon/C/c' + i + '.png'));
+  }
+  for(let i = 1; i <= 10; i++){
+    endToonFImgs.push(loadImage('./assets/toon/F/f' + i + '.png'));
+  }
+  for(let i = 1; i <= 4; i++){
+    rankImgs.push(loadImage('./assets/graphic/rank' + i + '.jpg'));
+  }
 }
 
 function setup() {
   createCanvas(843, 596);
-  introToon = new Toon();
-  introToon.setToon(introToonImgs, -999);
-  endToon = new Toon();
+  introToon = new Toon(gamefont, rankImgs);
+  introToon.setToon(introToonImgs, rankImgs[0], -999, 'INTRO');
+  endToon = new Toon(gamefont, rankImgs);
 }
 
 function keyPressed(){
@@ -172,10 +184,17 @@ function changeScene(){
       break;
     case 'GAME' :
       gameScore = gameController.getFinalScore();
-      if(gameScore > 20000){
-        endToon.setToon(endToonBImgs, gameScore);
-      }else{
-        endToon.setToon(endToonCImgs, gameScore);
+      if(gameScore > 60000){
+        endToon.setToon(endToonAImgs, rankImgs[0], gameScore, 'A');
+      }
+      else if(gameScore > 40000){
+        endToon.setToon(endToonBImgs, rankImgs[1], gameScore, 'B');
+      }
+      else if(gameScore > 20000){
+        endToon.setToon(endToonCImgs, rankImgs[2], gameScore, 'C');
+      }
+      else{
+        endToon.setToon(endToonFImgs, rankImgs[3], gameScore, 'F');
       }
       currentScene = 'END_TOON';
       break;
