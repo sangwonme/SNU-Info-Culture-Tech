@@ -239,6 +239,12 @@ class Toon{
       for(let i = 0; i < this.bubble.length; i ++){
         image(this.toonImgs[this.bubble[i]], width/2, height/2, 810, 540);
       }
+      fill(0);
+      textAlign(CENTER, CENTER);
+      textSize(30);
+      textFont(this.gamefont);
+      text('Click!', width-50, height-50);
+      textSize(45);
     }
     // when end toon ends.
     else{

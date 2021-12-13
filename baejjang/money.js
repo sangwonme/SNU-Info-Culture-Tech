@@ -17,10 +17,7 @@ class Money{
 	}
 
 	checkTouch(x, y){
-		let d = dist(x, y, this.posX, this.posY)
-		if(d < 30){
-			print(d);
-		}
+		let d = dist(x, y, this.posX, this.posY);
 		return (dist(x, y, this.posX, this.posY) < 40);
 	}
 	

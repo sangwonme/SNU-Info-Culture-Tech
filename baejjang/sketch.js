@@ -7,7 +7,7 @@ let tutorial;
 // game controller
 let gameController;
 let gameScore;
-let difficulty = 30000;
+let difficulty = 70000/3;
 
 // immages
 let graphicAssets = {};
